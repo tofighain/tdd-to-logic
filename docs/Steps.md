@@ -83,3 +83,11 @@ b) again based on route address ('/api/user') that references to AuthController@
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: AuthControllerTest@testUser | Added: UserResource. Added: UserRequest. Changed: AuthController@register. Changed: AuthController@user | 
+
+* ### intermission
+    Here is the point, I think, I should add a [todo.md](./todo.md) file, so I don't miss what should I do in next versions and If I have more time, whereto invest it. I included it in my version-controlling so other team members and I work together and make it work.
+
+    | git message    | what have i done |
+    |----------------|:-----------------|
+    | Added: todo.md | Added: todo.md so we can cooperate, down the road | 
+    
