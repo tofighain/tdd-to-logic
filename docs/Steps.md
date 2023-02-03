@@ -70,3 +70,16 @@ c) There are a RegisterRequest class inside Requests folder which can be used to
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: AuthControllerTest@testRegister | Changed: Fillables in the model. Added: RegisterResource. Changed: AuthController@register. Commented: Extra test cases inside the main test class |
+
+###1.2. testUser
+a) because in the second test method we see ```Sanctum``` and static call for ```actingAs``` it can be concluded that user authentication should be perform using **api tokens**. So in the register (/create a new user) we should add token to the user using below:
+```php
+$user['token'] = $user->createToken('api-token')->plainTextToken;
+```
+b) again based on route address ('/api/user') that references to AuthController@user method. And again because a customized result has been return. We should create another api resource (this time **name**-resource) called UserResource (for the sake of consistancy and scalablity another Request type is created with the title of UserRequest for now it is empty and is not used but later it would be filled with validation rules, authorization, etc. )
+* **Note** that we could use ```$request->user()``` as input of UserResource, but first I checked ```$request->user()->id``` with the database to add an extra layer of security. 
+* Now is the time to commit the changes as below:
+
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: AuthControllerTest@testUser | Added: UserResource. Added: UserRequest. Changed: AuthController@register. Changed: AuthController@user | 
