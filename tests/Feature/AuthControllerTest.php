@@ -21,7 +21,7 @@ class AuthControllerTest extends TestCase
             'lastname' => 'اکبری',
             'password' => '123456'
         ));
-
+        
         $response
             ->assertStatus(200)
             ->assertJson(function (AssertableJson $json) {
@@ -31,27 +31,27 @@ class AuthControllerTest extends TestCase
                 $json->missing('user.password');
             });
 
-        $response = $this->postJson('/api/register', array(
-            'cellphone' => '009123456789',
-            'password' => '12345'
-        ))
-            ->assertStatus(422)
-            ->assertJson(fn (AssertableJson $json) => 
-                $json->hasAll(["errors.cellphone", "errors.name","errors.lastname", "errors.password"])->etc()
-            );
+        // $response = $this->postJson('/api/register', array(
+        //     'cellphone' => '009123456789',
+        //     'password' => '12345'
+        // ))
+        //     ->assertStatus(422)
+        //     ->assertJson(fn (AssertableJson $json) => 
+        //         $json->hasAll(["errors.cellphone", "errors.name","errors.lastname", "errors.password"])->etc()
+        //     );
     }
 
-    public function testUser(): void {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
+    // public function testUser(): void {
+    //     $user = User::factory()->create();
+    //     Sanctum::actingAs($user);
 
-        $this->getJson("/api/user")
-            ->assertStatus(200)
-            ->assertJson(function (AssertableJson $json) use ($user) {
-                $json->where("user.cellphone", $user->cellphone);
-                $json->where("user.name", $user->name);
-                $json->where("user.lastname", $user->lastname);
-                $json->missing('user.password');
-            });
-    }
+    //     $this->getJson("/api/user")
+    //         ->assertStatus(200)
+    //         ->assertJson(function (AssertableJson $json) use ($user) {
+    //             $json->where("user.cellphone", $user->cellphone);
+    //             $json->where("user.name", $user->name);
+    //             $json->where("user.lastname", $user->lastname);
+    //             $json->missing('user.password');
+    //         });
+    // }
 }

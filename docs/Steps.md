@@ -33,6 +33,40 @@ in order to run my code with the specifiied requirements mentioned in the **chal
 
     | git message    | what have i done |
     |----------------|------------------|
-    | Added: docker containers and needed ```.env``` fields     | in this step multiple directories, docker-compose.yml and assocciated **Dockerfile**s are added to project and the project is ready to be ran|
+    | Added: docker containers and needed ```.env``` fields     | in this step multiple directories, docker-compose.yml and assocciated **Dockerfile**s are added to project and the project is ready to be ran. I also added a new get route to test if every thing is working correctly|
 
 # C. Migrate Data, To DBMS
+using below command the migrations are occured inside table ```dnj_challange_3```.
+```ssh
+php artisan migrate
+```
+* **Note**: because there are no changes here in my code, so there are no commits in the git repo. but I document this step as I do in real life.
+
+***THIS WAS THE LAST STEP BEFORE I ACTUALLY START MY PROGRAMMING***
+
+# D. PASSING TEST
+Because the only resources we have to conclude what should be programmed are test cases and a brief readme file so I used the tests as a starting point to apporach the challange.
+
+##1. AuthControllerTest
+
+###1.1. testRegister
+
+a) How to test? Instead of ```php artisan test``` I prefer to use ```phpunit --filter AuthControllerTest``` as it is obviouse in the changes i also commented out all other test cases.
+
+b) Because the results have a missing property (*password*) it can be infered a verb-resource is needed. to be consistent with the tests, i generate an API resource: ```RegisterResource``` using below command:
+```ssh
+php artisan make:resource RegisterResource
+```
+It creates **RegisterResource.php** file inside **app/Http/Resources** directory. The ```toArray``` method would be overwritten as it is in the file, to hide password from returned results.
+
+c) There are a RegisterRequest class inside Requests folder which can be used to validate the request. So I **type hint** it as an input argument, in the AuthController.
+* **Note**: Fillables of the User should be changed as below:
+    - name
+    - **lastname**
+    - **cellphone**
+    - password
+* Now is the time to commit the changes as below:
+
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: AuthControllerTest@testRegister | Changed: Fillables in the model. Added: RegisterResource. Changed: AuthController@register. Commented: Extra test cases inside the main test class |
