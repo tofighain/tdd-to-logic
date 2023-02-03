@@ -1,0 +1,55 @@
+version: '3.8'
+services:
+  apache:
+    container_name: apache2
+    build: ./docker_files/apache2
+    links:
+      - php
+    ports:
+      - 80:80
+    volumes:
+      - ./docker_files/logs/apache:/var/log/apache2
+      - .:/usr/local/apache2/htdocs/dnj/challange3
+    
+  php:
+    container_name: php8.1
+    build: ./docker_files/php8.1
+    ports:
+      - 9000:9000
+    volumes:
+      - .:/usr/local/apache2/htdocs/dnj/challange3
+    working_dir: /usr/local/apache2/htdocs/dnj/challange3
+  
+  composer:
+    container_name: composer_latest
+    image: composer/composer
+    volumes:
+      - .:/usr/local/apache2/htdocs/dnj/challange3
+    working_dir: /usr/local/apache2/htdocs/dnj/challange3
+    command: install
+
+  mysql:
+    image: mysql:8.0.27
+    container_name: mysql8.0.27
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_DATABASE: dnj_challange_3
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 'root'
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker_files/database/mysql:/var/lib/mysql
+  
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    links:
+      - mysql
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+    restart: always
+    ports:
+      - 8085:80

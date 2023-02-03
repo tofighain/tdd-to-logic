@@ -7,6 +7,9 @@ use App\Http\Controllers\TravelSpotController;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/', function () {
+    return 'API works correctly';
+});
 
 Route::post("/register", [AuthController::class, "register"]);
 
