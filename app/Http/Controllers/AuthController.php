@@ -31,7 +31,7 @@ class AuthController extends Controller
 		// note that an especialized request called UserRequest is 
 		// generated for furture imporvments 
 		// may for service providers
-		$user = User::where('id', $request->user()->id)->first();
+		$user = User::where('id', $request->user()->id)->firstOrFail();
 		return UserResource::make($request->user())->response()->setStatusCode(200);
 	}
 }

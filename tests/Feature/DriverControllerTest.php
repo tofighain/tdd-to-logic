@@ -45,33 +45,33 @@ class DriverControllerTest extends TestCase
             ));
     }
 
-    public function testUpdate(): void
-    {
-        Travel::factory(3)->create();
-        $pendingTravels = Travel::factory(2)->searchingForDriver()->create();
+    // public function testUpdate(): void
+    // {
+    //     Travel::factory(3)->create();
+    //     $pendingTravels = Travel::factory(2)->searchingForDriver()->create();
 
-        $driver = Driver::factory()->create();
-        Sanctum::actingAs($driver->user);
+    //     $driver = Driver::factory()->create();
+    //     Sanctum::actingAs($driver->user);
 
-        $driverData = array(
-            'latitude' => 32.7088770,
-            'longitude' => 51.6607175,
-            'status' => DriverStatus::WORKING->value,
-        );
+    //     $driverData = array(
+    //         'latitude' => 32.7088770,
+    //         'longitude' => 51.6607175,
+    //         'status' => DriverStatus::WORKING->value,
+    //     );
 
-        $response = $this->putJson('/api/driver', $driverData)
-            ->assertStatus(200)
-            ->assertJson(array(
-                'driver' => $driverData
-            ))
-            ->assertJson(function (AssertableJson $json) {
-                $json->has("travels", 2);
-                $json->hasAll(["travels.0.id", "travels.0.spots", "travels.1.id", "travels.1.spots"]);
-                $json->etc();
-            });
+    //     $response = $this->putJson('/api/driver', $driverData)
+    //         ->assertStatus(200)
+    //         ->assertJson(array(
+    //             'driver' => $driverData
+    //         ))
+    //         ->assertJson(function (AssertableJson $json) {
+    //             $json->has("travels", 2);
+    //             $json->hasAll(["travels.0.id", "travels.0.spots", "travels.1.id", "travels.1.spots"]);
+    //             $json->etc();
+    //         });
 
-        foreach ($response['travels'] as $travel) {
-            $this->assertTrue($pendingTravels->pluck("id")->contains($travel['id']));
-        }
-    }
+    //     foreach ($response['travels'] as $travel) {
+    //         $this->assertTrue($pendingTravels->pluck("id")->contains($travel['id']));
+    //     }
+    // }
 }

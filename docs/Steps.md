@@ -90,4 +90,19 @@ b) again based on route address ('/api/user') that references to AuthController@
     | git message    | what have i done |
     |----------------|:-----------------|
     | Added: todo.md | Added: todo.md so we can cooperate, down the road | 
-    
+
+##2. DriverControllerTest
+here is why i choose to work with this test class. because according to documentations, A driver is a **sub-entity** of **user** and these two are very related together. 
+
+* **Note** that it is a hirearchial entity so I suggest an interface called **IUser** is added to the struture, so using **strategy design pattern** we can create subclasses and other sibbling-classes easily and correctly.
+
+a) each driver has at least two extra properties related to his/ her auto/car (```car_plate```, ```car_model```). and one extra property for the ```status```, that is modeled as Enumerator in **app/Enums/DriverStatus.php**. Using the data, we should again add a new resource: ```DriverResource```. It also noted an specified request class exists in my code base called ```DriverSignupRequest``` that handles validation of driver signup proccess, so I typehint it in the ```signup``` method. In this step i don't create a ```DriverSignupResource``` maybe later i add it if is needed.
+b) we should check for 2 things in driver ```signup``` method
+- Check if user is signed in
+- If user is a driver already or not
+    - for **optimization purposes**, to check a driver, it is better first to check if a user is not a driver because usually this type of requests is more recieved from normal users.
+* Now is the time to commit the changes as below:
+
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: DriverControllerTest@testSignup | Added: DriverResource. Changed: todo.md. Changed: DriverController@signup. Changed:AuthController@user|     
