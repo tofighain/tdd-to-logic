@@ -192,3 +192,25 @@ The test targets **TravelController@view** and implies that both passangers and 
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: TravelControllerTest@testView | Changed: TravelControllerTest. Changed: TravelController|
+
+###5.5. testPassengerOnBoard
+The test targets **TravelController@passengerOnBoard** which is a post request in the api. And checks if a passanger is on board in any of travel events. 
+
+- it checks driver's passanger (the passanger of the driver), so **the driver can check this endpoint**.
+- it should return the travel with its associated events. 
+- to create TravelEvent in my way $fillable property is defined as below:
+    ```php
+    protected $fillable = ['travel_id', 'type'];
+    ```
+- if there are no passangers on board, user (driver) can not check for it (there is no action for the user here) InvalidTravelStatusForThisAction
+- **very important note** here either the factory is wrong or the test should not assertTrue. I think the first scenario is the case. Because I checked the factories of travel (TravelFactory) and travel events (TravelEventFactory), and none try to make a travel with travel event status of **PASSENGER_ONBOARD**, so 
+    - I modify the **TestingTravel** file and add ```runningTravelPassangerOnBoard``` method in it.
+    - changed ```acceptByDriver``` with ```passengerOnBoard```
+    - Update the test case from ```runningTravel``` to ```runningTravelPassangerOnBoard```
+    - add another test case for the case that user is not on board in the travel using ```runningTravel```.
+    - I added another header in the **todo.md** and report this for furthur discussion. 
+* Now is the time to commit the changes as below:
+    
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelControllerTest@testPassengerOnBoard | Changed: todo.md. Changed: TravelControllerTest. Changed: TravelController. Changed: TestingTravel. Changed: TravelEvent.|

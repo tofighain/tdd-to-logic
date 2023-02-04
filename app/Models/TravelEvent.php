@@ -11,7 +11,7 @@ class TravelEvent extends Model
     const UPDATED_AT = null;
 
     use HasFactory;
-
+    protected $fillable = ['travel_id', 'type'];
     protected $table = "travels_events";
     protected $casts = array(
         'type' => TravelEventType::class,

@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TravelEventType;
 use App\Enums\TravelStatus;
 use App\Exceptions\ActiveTravelException;
 use App\Exceptions\CannotCancelFinishedTravelException;
 use App\Exceptions\CannotCancelRunningTravelException;
+use App\Exceptions\InvalidTravelStatusForThisActionException;
 use App\Http\Requests\TravelStoreRequest;
 use App\Http\Resources\TravelResource;
 use App\Http\Resources\TravelStoreResource;
@@ -80,8 +82,23 @@ class TravelController extends Controller
 		return TravelResource::make($theTravel);
 	}
 
-	public function passengerOnBoard()
+	public function passengerOnBoard(Request $request, $travel)
 	{
+		$driver = $request->user();
+		// check if the user is indeed a driver otherwise abort the request
+		if(!Driver::isDriver($driver) ) return abort(403);
+
+		$theTravel = Travel::where([['id', '=', $travel], ['driver_id', '=', $driver->id]])->with(['events'])->firstOrFail();
+		$isPassangerInTheCar = $theTravel->passengerIsInCar();
+		
+		// change the status of the last event as passanger is on board
+		if($isPassangerInTheCar) {
+			$theTravel->events()->create(['type' => TravelEventType::PASSENGER_ONBOARD]);
+		}else {
+			throw new InvalidTravelStatusForThisActionException();
+		}
+
+		return TravelResource::make($theTravel);
 	}
 
 	public function done()
