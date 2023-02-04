@@ -96,6 +96,8 @@ here is why i choose to work with this test class. because according to document
 
 * **Note** that it is a hirearchial entity so I suggest an interface called **IUser** is added to the struture, so using **strategy design pattern** we can create subclasses and other sibbling-classes easily and correctly.
 
+###2.1. testSignup
+
 a) each driver has at least two extra properties related to his/ her auto/car (```car_plate```, ```car_model```). and one extra property for the ```status```, that is modeled as Enumerator in **app/Enums/DriverStatus.php**. Using the data, we should again add a new resource: ```DriverResource```. It also noted an specified request class exists in my code base called ```DriverSignupRequest``` that handles validation of driver signup proccess, so I typehint it in the ```signup``` method. In this step i don't create a ```DriverSignupResource``` maybe later i add it if is needed.
 b) we should check for 2 things in driver ```signup``` method
 - Check if user is signed in
@@ -105,4 +107,36 @@ b) we should check for 2 things in driver ```signup``` method
 
 | git message    | what have i done |
 |----------------|:-----------------|
-| test passed: DriverControllerTest@testSignup | Added: DriverResource. Changed: todo.md. Changed: DriverController@signup. Changed:AuthController@user|     
+| test passed: DriverControllerTest@testSignup | Added: DriverResource. Changed: todo.md. Changed: DriverController@signup. Changed:AuthController@user|
+
+
+###2.2. testUpdate
+In this stage, because Travel controller is not defined, I omit the test for now, and work on passing Travel and TravelEvent unit tests.
+
+##3. TravelTest
+The only TravelTest method is testRelations. Which the other team members have done the job by creating a greate Travel eloquent model. I did nothing here so, there would be no version controlling here. 
+
+##4. TravelEventTest.php
+Again there is one and only test of this class is testRelations, which is passed because of a perfect TravelEvent elqouent model.
+I think more test can be designed in 3 and 4 cases.
+
+##5. TravelControllerTest
+In order to complete **TravelController** i ommit 2.2. tests for now.
+
+###5.1 testStore
+testStore targets **TravelController@store** method. 
+    - There is a TravelStoreRequest class to handle these types of request, so I typehint it in the store methode. 
+    - Reverse engineering shows the authenticated passenger can create the travel, I get it from $request->user().
+    - TravelResource can not be used for store method output. So TravelStoreResource is devised to format the output.
+    - Spots are given by $request, if not fill them with empty array for furthur inspections.
+    - It should be checked if current user (passanger) can take a new travel (he/she has already taken a travel). If so an exception of type **ActiveTravelException** should be thrown. Because usually users act normally, this exception should be thrown after checking that the user didn't act normally (**optimization**)
+    - Because each travel at least consists of two spots, and these spots should be store inside database and also other information of travel should be stored seperately, using **transaction** is highly recommanded. 
+    - the status of the user should be **SEARCHING_FOR_DRIVER** at this initial stage.
+    - the f...ing ```status``` should be added to fillable property of the Travel model. So i can use mass assignment. (I could use save method but that is slower than create static call and that's not my style.) Also ```passenger_id``` is added to the fillable.
+    - ```position, latitude, longitude``` should be added to fillables of **TravelSpot** model. (Only to save some millisecods, and also in compliance of my codding style)
+    * Now is the time to commit the changes as below:
+
+    | git message    | what have i done |
+    |----------------|:-----------------|
+    | test passed: TravelControllerTest@testStore | Added: TravelStoreResource. Changed: Travel. Changed: TravelController. Changed:TravelSpot. Changed: TravelControllerTest|
+
