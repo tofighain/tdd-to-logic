@@ -13,6 +13,7 @@ use App\Exceptions\InvalidTravelStatusForThisActionException;
 use App\Http\Requests\TravelStoreRequest;
 use App\Http\Resources\TravelResource;
 use App\Http\Resources\TravelStoreResource;
+use App\Http\Resources\TravelTakeResource;
 use App\Models\Driver;
 use App\Models\Travel;
 use Illuminate\Http\Request;
@@ -144,7 +145,25 @@ class TravelController extends Controller
 
 	}
 
-	public function take()
+	public function take(Request $request, $travel)
 	{
+		$driver = $request->user();
+		// check if the user is indeed a driver otherwise abort the request
+		if(!Driver::isDriver($driver) ) return abort(403);
+		//recreate the travel object from $travel (travel_id)
+		$theTravel = Travel::where([['id', '=', $travel]])->firstOrFail();
+
+		if($theTravel->status == TravelStatus::SEARCHING_FOR_DRIVER) {
+			DB::beginTransaction();
+			// todo: don't forget to lock data 
+			// why still is searching for driver ?
+			$theTravel->status = TravelStatus::SEARCHING_FOR_DRIVER;
+			$theTravel->driver_id = $driver->id;
+			$theTravel->save();
+			DB::commit();
+		}
+
+		return TravelTakeResource::make($theTravel);
+
 	}
 }

@@ -259,3 +259,15 @@ using provided eloquent-model method ```allSpotsPassed``` in the **Travel** clas
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: TravelControllerTest@testDoneWhenSpotsSkipped | Changed: TravelControllerTest. Changed: TravelController. Changed: todo.md|
+
+###5.12. testTake
+This test and multiple later ones, target **TravelControl@take** and try to model if a driver can or can not take a travel. based on the current test:
+ - driver can take travel with the status of ```SEARCHING_FOR_DRIVER```
+ - the weird thing here is that based on the needed results, after trying to take the travel, driver_id is updated but the status remains ```SEARCHING_FOR_DRIVER```. I noted this issue in the todo.md under concerns. 
+ - ⚠️⚠️⚠️ **VERY IMPORTANT** thing to note here is that maybe there are several drivers who try to take on single travel, so the travel should be **LOCKED PESSIMISTICALLY** ⚠️⚠️⚠️ . I noted this in the concerns. Later I will adderess the issue using **transactions**, ```lockForUpdate()``` and other tools and techniques. But for now i just code it fast and lazy :D
+
+* Now is the time to commit the changes as below:
+    
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelControllerTest@testTake | Added: TravelTakeResource. Changed: TravelControllerTest. Changed: TravelController. Changed: todo.md.|
