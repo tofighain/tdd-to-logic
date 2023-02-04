@@ -135,8 +135,29 @@ testStore targets **TravelController@store** method.
     - the f...ing ```status``` should be added to fillable property of the Travel model. So i can use mass assignment. (I could use save method but that is slower than create static call and that's not my style.) Also ```passenger_id``` is added to the fillable.
     - ```position, latitude, longitude``` should be added to fillables of **TravelSpot** model. (Only to save some millisecods, and also in compliance of my codding style)
     * Now is the time to commit the changes as below:
+    
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelControllerTest@testStore | Added: TravelStoreResource. Changed: Travel. Changed: TravelController. Changed:TravelSpot. Changed: TravelControllerTest|
 
-    | git message    | what have i done |
-    |----------------|:-----------------|
-    | test passed: TravelControllerTest@testStore | Added: TravelStoreResource. Changed: Travel. Changed: TravelController. Changed:TravelSpot. Changed: TravelControllerTest|
+###5.2 testStoreWithBadPositions, testStoreWhenHaveActiveTravel
+these two tests are also passed using provided code in 5.1. so no need to version-control (no changes !)
 
+###5.3 testCancelSearchingForDriverAsPassenger
+this test targets **TravelController@cancel** in route */travels/{travel}/cancel*. 
+- based on the test, a logged-in user (passanger of a travel) can cancel the travel, so we need to extract passanger info. 
+- based on the test, and also the api call, data of the travel (travel_id) should be inserted into the method as args.
+- Travel should be exsited and assigned to the passange in order to let him/her to cancel it. 
+    * using {travel} as arg name, is a bad naming decision. I think it is better to use {id} or {travel_id} instead. 
+- Finished or already canceled travels should not be cancelable. In the **TravelStatus** point of view, ```DONE``` and ```CANCELLED``` are not cancellable. 
+    * **optimization** despite pervious situations, this time it is better to put abnormal users' logic first, because it is possible to that other statuses be added in the TravelStatus enums.
+- because there is a user defined exception called ```CannotCancelFinishedTravelException``` for one mentioned situations, i used the exception for both of cases, but it is better to define specific exceptions for either of cases. 
+- user also cannot cancel already started travel. there is another exception class for that too. ```CannotCancelRunningTravelException```
+    * **optimization** there is no need to add it in ```elseif``` block, since previous ```if``` block is used to throw exceptions. 
+- if non of mentioned situation is the case, passange may cancel the travel, and travel's status updated as canceled.
+- note that, up to this stage the one other test is passed correctly **testCancelFinishedTravel**
+* Now is the time to commit the changes as below:
+    
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelControllerTest@testCancelSearchingForDriverAsPassenger and testCancelFinishedTravel | Changed: todo.md. Changed: TravelControllerTest. Changed: TravelController|

@@ -4,6 +4,8 @@
 - # IDEAS (SHOULD)
     - **Use: Strategy DP**, for User related classes like, users, drivers, travelers, personals, etc. Try to use **composition instead of inheritance**.
     - **Seperate: entity access** concerns using different kinds of **repositories** and **service providers**
+    - using **{travel}** as arg name, is a bad naming decision. I think it is better to use **{id}** or **{travel_id}** instead. 
+    - there is ```CannotCancelFinishedTravelException``` exeption but another one is needed for already canceled travels like ```CannotCancelAlreadyCancelledTravelException```
 
 - # FURTHER STUDIES (NOTE)
 

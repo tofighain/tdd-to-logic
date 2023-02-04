@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Enums\TravelStatus;
 use App\Exceptions\ActiveTravelException;
+use App\Exceptions\CannotCancelFinishedTravelException;
+use App\Exceptions\CannotCancelRunningTravelException;
 use App\Http\Requests\TravelStoreRequest;
 use App\Http\Resources\TravelResource;
 use App\Http\Resources\TravelStoreResource;
 use App\Models\Travel;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class TravelController extends Controller
@@ -39,8 +42,23 @@ class TravelController extends Controller
 		}
 	}
 
-	public function cancel()
+	public function cancel(Request $request, $travel)
 	{
+		$passanger = $request->user();
+		$theTravel = Travel::where([['passenger_id', '=', $passanger->id], ['id', '=', $travel]])->firstOrFail();
+		if( $theTravel->status==TravelStatus::CANCELLED || $theTravel->status==TravelStatus::DONE){
+            throw  new CannotCancelFinishedTravelException();
+        }
+
+		if( $theTravel->status==TravelStatus::RUNNING){
+            throw  new CannotCancelRunningTravelException();
+        }
+
+		// if non of above is the case, cancel the travel
+		$theTravel->status=TravelStatus::CANCELLED->value;
+        $theTravel->save();
+		// return results
+		return TravelResource::make($theTravel);
 	}
 
 	public function passengerOnBoard()

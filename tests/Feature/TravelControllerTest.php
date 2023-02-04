@@ -52,90 +52,90 @@ class TravelControllerTest extends TestCase
             ));
     }
 
-    // public function testStoreWithBadPositions(): void
-    // {
-    //     $passenger = User::factory()->create();
-    //     Sanctum::actingAs($passenger);
+    public function testStoreWithBadPositions(): void
+    {
+        $passenger = User::factory()->create();
+        Sanctum::actingAs($passenger);
 
 
-    //     $this->postJson('/api/travels', array(
-    //         'spots' => array(
-    //             array(
-    //                 'position' => 1,
-    //                 'latitude'  => 32.70946862,
-    //                 'longitude' => 51.66043121,
-    //             ),
-    //             array(
-    //                 'position' => 2,
-    //                 'latitude'  => 32.67596261,
-    //                 'longitude' => 51.65045944,
-    //             )
-    //         ),
-    //     ))
-    //         ->assertStatus(422)
-    //         ->assertJson(fn (AssertableJson $json) => $json->has("errors.spots")->etc());
-    // }
+        $this->postJson('/api/travels', array(
+            'spots' => array(
+                array(
+                    'position' => 1,
+                    'latitude'  => 32.70946862,
+                    'longitude' => 51.66043121,
+                ),
+                array(
+                    'position' => 2,
+                    'latitude'  => 32.67596261,
+                    'longitude' => 51.65045944,
+                )
+            ),
+        ))
+            ->assertStatus(422)
+            ->assertJson(fn (AssertableJson $json) => $json->has("errors.spots")->etc());
+    }
 
-    // public function testStoreWhenHaveActiveTravel()
-    // {
-    //     $user = User::factory()->create();
-    //     Travel::factory()
-    //         ->withPassenger($user)
-    //         ->running()
-    //         ->create();
+    public function testStoreWhenHaveActiveTravel()
+    {
+        $user = User::factory()->create();
+        Travel::factory()
+            ->withPassenger($user)
+            ->running()
+            ->create();
 
-    //     Sanctum::actingAs($user);
-    //     $this->postJson('/api/travels', ['spots' => self::TWO_SPOTS])
-    //         ->assertStatus(400)
-    //         ->assertJson(array(
-    //             "code" => "ActiveTravel"
-    //         ));
-    // }
+        Sanctum::actingAs($user);
+        $this->postJson('/api/travels', ['spots' => self::TWO_SPOTS])
+            ->assertStatus(400)
+            ->assertJson(array(
+                "code" => "ActiveTravel"
+            ));
+    }
 
-    // public function testCancelSearchingForDriverAsPassenger()
-    // {
-    //     $passenger = User::factory()->create();
-    //     $travel = Travel::factory()
-    //         ->withPassenger($passenger)
-    //         ->searchingForDriver()
-    //         ->create();
+    public function testCancelSearchingForDriverAsPassenger()
+    {
+        $passenger = User::factory()->create();
+        $travel = Travel::factory()
+            ->withPassenger($passenger)
+            ->searchingForDriver()
+            ->create();
 
-    //     Sanctum::actingAs($passenger);
-    //     $this->postJson("/api/travels/{$travel->id}/cancel")
-    //         ->assertStatus(200)
-    //         ->assertJson(function (AssertableJson $json) {
-    //             $json->where("travel.status", TravelStatus::CANCELLED->value);
-    //             $json->etc();
-    //         });
-    // }
+        Sanctum::actingAs($passenger);
+        $this->postJson("/api/travels/{$travel->id}/cancel")
+            ->assertStatus(200)
+            ->assertJson(function (AssertableJson $json) {
+                $json->where("travel.status", TravelStatus::CANCELLED->value);
+                $json->etc();
+            });
+    }
 
-    // public function testCancelFinishedTravel()
-    // {
-    //     $passenger = User::factory()->create();
-    //     Sanctum::actingAs($passenger);
+    public function testCancelFinishedTravel()
+    {
+        $passenger = User::factory()->create();
+        Sanctum::actingAs($passenger);
 
-    //     $travel = Travel::factory()
-    //         ->withPassenger($passenger)
-    //         ->cancelled()
-    //         ->create();
+        $travel = Travel::factory()
+            ->withPassenger($passenger)
+            ->cancelled()
+            ->create();
 
-    //     $this->postJson("/api/travels/{$travel->id}/cancel")
-    //         ->assertStatus(400)
-    //         ->assertJson(array(
-    //             "code" => "CannotCancelFinishedTravel"
-    //         ));
+        $this->postJson("/api/travels/{$travel->id}/cancel")
+            ->assertStatus(400)
+            ->assertJson(array(
+                "code" => "CannotCancelFinishedTravel"
+            ));
 
-    //     $travel = Travel::factory()
-    //         ->withPassenger($passenger)
-    //         ->done()
-    //         ->create();
+        $travel = Travel::factory()
+            ->withPassenger($passenger)
+            ->done()
+            ->create();
 
-    //     $this->postJson("/api/travels/{$travel->id}/cancel")
-    //         ->assertStatus(400)
-    //         ->assertJson(array(
-    //             "code" => "CannotCancelFinishedTravel"
-    //         ));
-    // }
+        $this->postJson("/api/travels/{$travel->id}/cancel")
+            ->assertStatus(400)
+            ->assertJson(array(
+                "code" => "CannotCancelFinishedTravel"
+            ));
+    }
 
     // public function testCancelOnboardPassenger()
     // {
