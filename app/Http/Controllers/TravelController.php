@@ -17,8 +17,13 @@ use Illuminate\Support\Facades\DB;
 class TravelController extends Controller
 {
 
-	public function view()
+	public function view($travel)
 	{
+		$user = request()->user();
+		$theTravel = Travel::where('id', '=', $travel)->where(function ($query) use ($user) {
+			$query->where('passenger_id', '=', $user->id)->orWhere('driver_id', '=', $user->id);
+		})->firstOrFail();
+		return response()->json(TravelStoreResource::make($theTravel), 200);
 	}
 
 	public function store(TravelStoreRequest $request)

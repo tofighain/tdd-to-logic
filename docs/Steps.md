@@ -184,3 +184,11 @@ As it is stated in TestingTravel concerns, **users can not cancel** an already r
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: TravelControllerTest@testCancelArrivedCar | Changed: todo.md. Changed: TravelControllerTest. Changed: TravelController|
+
+###5.5. testView
+The test targets **TravelController@view** and implies that both passangers and drivers can view the travel and I think it is better for them to see their own travels not travels of the others. And because it is a get request, it is better to use request() global helper instead of injecting $request into the method.
+* Now is the time to commit the changes as below:
+    
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelControllerTest@testView | Changed: TravelControllerTest. Changed: TravelController|

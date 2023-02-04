@@ -178,22 +178,22 @@ class TravelControllerTest extends TestCase
         ));
     }
 
-    // public function testView()
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
-    //     $travel = $this->runningTravel($passenger, $driver)->create();
-
-    //     foreach ([$passenger, $driver->user] as $user) {
-    //         Sanctum::actingAs($user);
-    //         $this->getJson("/api/travels/{$travel->id}")
-    //             ->assertStatus(200)
-    //             ->assertJson(array(
-    //                 "travel" => array(
-    //                     'id' => $travel->id
-    //                 )
-    //             ));
-    //     }
-    // }
+    public function testView()
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
+        $travel = $this->runningTravel($passenger, $driver)->create();
+        
+        foreach ([$passenger, $driver->user] as $user) {
+            Sanctum::actingAs($user);
+            $this->getJson("/api/travels/{$travel->id}")
+                ->assertStatus(200)
+                ->assertJson(array(
+                    "travel" => array(
+                        'id' => $travel->id
+                    )
+                ));
+        }
+    }
 
     // public function testPassengerOnBoard()
     // {
