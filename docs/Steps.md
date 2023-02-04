@@ -225,3 +225,10 @@ the test like its predecessors targets **TravelController@passengerOnBoard**. No
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: TravelControllerTest@testPassengerOnBoardWhenCarIsNotArrived and testPassengerOnBoardAsPassenger | Changed: TravelControllerTest. Changed: TravelController.|
+
+###5.8. testPassengerOnBoardFinishedTravel
+If the travel is finished, no one allowed to check if somebody is on board. **IS IT LOGICALLY A GOOD ASSUMPTION ?**
+
+| git message    | what have i done |
+|----------------|:-----------------|
+| finished: all tests of passengerOnBoard method is finished. test passed: TravelControllerTest@testPassengerOnBoardFinishedTravel | Changed: TravelControllerTest. Changed: TravelController. Changed: todo.md|

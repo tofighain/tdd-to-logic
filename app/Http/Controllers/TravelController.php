@@ -90,6 +90,12 @@ class TravelController extends Controller
 		if(!Driver::isDriver($driver) ) return abort(403);
 
 		$theTravel = Travel::where([['id', '=', $travel], ['driver_id', '=', $driver->id]])->with(['events'])->firstOrFail();
+
+		// if travel is already done, driver can not check it for on board passangers. 
+		if ($theTravel->status == TravelStatus::DONE) {
+			throw new InvalidTravelStatusForThisActionException();
+		}
+
 		// to pass testPassengerOnBoardWhenCarIsNotArrived, 
 		// should be checked before checking passanger is checked.
 		if (!$theTravel->driverHasArrivedToOrigin()) {

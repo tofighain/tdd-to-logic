@@ -1,5 +1,6 @@
 - # CONCERNS (NEED FOR QUESTIONS AND DISCUSSIONS)
     - In **TravelControllerTest@testPassengerOnBoard** I changed the logic of the test, I really need some discussions here. I couldn't reverse-engineer the case (please help, everyone !)
+    - In **testPassengerOnBoardFinishedTravel** test case, is it a good practice to prevent users to check for onboard passangers, if it is already finished ?
 - # TO DO (MUST)
     - **Add: ```setPasswordAttribute```** method in User class, so the password be mutated without doning anything in the controller
 

@@ -233,7 +233,7 @@ class TravelControllerTest extends TestCase
     {
         [$passenger, $driver] = $this->createPassengerDriver();
         $travel = $this->runningTravel($passenger, $driver, false)->create();
-        
+
         Sanctum::actingAs($driver->user);
         $this->postJson("/api/travels/{$travel->id}/passenger-on-board")
             ->assertStatus(400)
@@ -242,18 +242,18 @@ class TravelControllerTest extends TestCase
             ));
     }
 
-    // public function testPassengerOnBoardFinishedTravel()
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
-    //     $travel = $this->runningTravel($passenger, $driver)->done()->create();
+    public function testPassengerOnBoardFinishedTravel()
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
+        $travel = $this->runningTravel($passenger, $driver)->done()->create();
 
-    //     Sanctum::actingAs($driver->user);
-    //     $this->postJson("/api/travels/{$travel->id}/passenger-on-board")
-    //         ->assertStatus(400)
-    //         ->assertJson(array(
-    //             'code' => 'InvalidTravelStatusForThisAction'
-    //         ));
-    // }
+        Sanctum::actingAs($driver->user);
+        $this->postJson("/api/travels/{$travel->id}/passenger-on-board")
+            ->assertStatus(400)
+            ->assertJson(array(
+                'code' => 'InvalidTravelStatusForThisAction'
+            ));
+    }
 
     // public function testDone()
     // {
