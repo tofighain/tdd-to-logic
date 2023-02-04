@@ -287,27 +287,27 @@ class TravelControllerTest extends TestCase
             ));
     }
 
-    // public function testDoneAsPassenger()
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
-    //     $travel = $this->runningTravel($passenger, $driver, true, true)->create();
+    public function testDoneAsPassenger()
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
+        $travel = $this->runningTravel($passenger, $driver, true, true)->create();
 
-    //     Sanctum::actingAs($passenger);
-    //     $this->postJson("/api/travels/{$travel->id}/done")->assertStatus(403);
-    // }
+        Sanctum::actingAs($passenger);
+        $this->postJson("/api/travels/{$travel->id}/done")->assertStatus(403);
+    }
 
-    // public function testDoneWhenSpotsSkipped()
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
-    //     $travel = $this->runningTravel($passenger, $driver, true, false)->create();
+    public function testDoneWhenSpotsSkipped()
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
+        $travel = $this->runningTravel($passenger, $driver, true, false)->create();
 
-    //     Sanctum::actingAs($driver->user);
-    //     $this->postJson("/api/travels/{$travel->id}/done")
-    //         ->assertStatus(400)
-    //         ->assertJson(array(
-    //             "code" => 'AllSpotsDidNotPass'
-    //         ));
-    // }
+        Sanctum::actingAs($driver->user);
+        $this->postJson("/api/travels/{$travel->id}/done")
+            ->assertStatus(400)
+            ->assertJson(array(
+                "code" => 'AllSpotsDidNotPass'
+            ));
+    }
 
     // public function testTake()
     // {

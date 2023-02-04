@@ -247,3 +247,15 @@ Based on the third assertion:
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: TravelControllerTest@testDone | Changed: TravelControllerTest. Changed: TravelController. Changed: todo.md|
+
+###5.10. testDoneAsPassenger
+based on this test in contrast with the driver, the user can not mark a travel as done. This situation was implied based on pervious test, so no need for version-control, here. 
+**BUT NOTE THAT** in cancel method both of the passanger and driver could mark a travel as canceled !
+
+###5.11. testDoneWhenSpotsSkipped
+using provided eloquent-model method ```allSpotsPassed``` in the **Travel** class, we can check if all spotes are passed or not. If the latest is the case, driver is not able to mark the travel as done. Because this case has its own exception, i put it in a seperate ```if``` statement block, and of course before i check travel is in ```RUNNING``` state.
+* Now is the time to commit the changes as below:
+    
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelControllerTest@testDoneWhenSpotsSkipped | Changed: TravelControllerTest. Changed: TravelController. Changed: todo.md|

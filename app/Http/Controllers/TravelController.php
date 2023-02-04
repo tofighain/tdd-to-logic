@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\TravelEventType;
 use App\Enums\TravelStatus;
 use App\Exceptions\ActiveTravelException;
+use App\Exceptions\AllSpotsDidNotPassException;
 use App\Exceptions\CannotCancelFinishedTravelException;
 use App\Exceptions\CannotCancelRunningTravelException;
 use App\Exceptions\CarDoesNotArrivedAtOriginException;
@@ -124,6 +125,11 @@ class TravelController extends Controller
 		if(!Driver::isDriver($driver) ) return abort(403);
 		//recreate the travel object from $travel (travel_id)
 		$theTravel = Travel::where([['id', '=', $travel], ['driver_id', '=', $driver->id]])->with(['events'])->firstOrFail();
+		
+		if(!$theTravel->allSpotsPassed()) {
+			throw new AllSpotsDidNotPassException();
+		}
+
 		if($theTravel->status == TravelStatus::RUNNING) {
 			DB::beginTransaction();
 				$theTravel->status = TravelStatus::DONE;
