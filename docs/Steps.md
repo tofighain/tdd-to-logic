@@ -161,3 +161,18 @@ this test targets **TravelController@cancel** in route */travels/{travel}/cancel
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: TravelControllerTest@testCancelSearchingForDriverAsPassenger and testCancelFinishedTravel | Changed: todo.md. Changed: TravelControllerTest. Changed: TravelController|
+
+
+###5.3 testCancelOnboardPassenger
+- First of all it is a bad naming decision to use similar names instead of exact naming. There is a method called ```passengerIsInCar``` but here the test specify to test **OnBoard**. so it is better to change method name because OnBoard is more general and can model future needs.
+- To pass this test we should modify the cancel method so it models both passengers and drivers. for instance, $passanger subtitutes with $user, and where clause changes to 
+```php
+...->where(function ($query) use ($user) {
+    $query->where('passenger_id', '=', $user->id)->orWhere('driver_id', '=', $user->id);
+})
+```
+* Now is the time to commit the changes as below:
+    
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelControllerTest@testCancelOnboardPassenger | Changed: todo.md. Changed: TravelControllerTest. Changed: TravelController|

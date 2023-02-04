@@ -28,15 +28,15 @@ class TravelController extends Controller
 		if (!Travel::userHasActiveTravel($passanger) && !is_null($travel_spots)) {
 			// more optimized to model normal users then abnormal ones.
 			DB::beginTransaction();
-				$travel = Travel::query()
-					->create([
-						'passenger_id' => $passanger->id,
-						'status' => TravelStatus::SEARCHING_FOR_DRIVER->value,
-					]);
-				$travel->spots()->createMany($travel_spots);
+			$travel = Travel::query()
+				->create([
+					'passenger_id' => $passanger->id,
+					'status' => TravelStatus::SEARCHING_FOR_DRIVER->value,
+				]);
+			$travel->spots()->createMany($travel_spots);
 			DB::commit();
 			// return needed results
-			return response()->json(TravelStoreResource::make($travel) , 201);
+			return response()->json(TravelStoreResource::make($travel), 201);
 		} else {
 			throw new ActiveTravelException();
 		}
@@ -44,19 +44,28 @@ class TravelController extends Controller
 
 	public function cancel(Request $request, $travel)
 	{
-		$passanger = $request->user();
-		$theTravel = Travel::where([['passenger_id', '=', $passanger->id], ['id', '=', $travel]])->firstOrFail();
-		if( $theTravel->status==TravelStatus::CANCELLED || $theTravel->status==TravelStatus::DONE){
-            throw  new CannotCancelFinishedTravelException();
-        }
+		$user = $request->user();
+		$theTravel = Travel::where('id', '=', $travel)->where(function ($query) use ($user) {
+			$query->where('passenger_id', '=', $user->id)->orWhere('driver_id', '=', $user->id);
+		})->firstOrFail();
+		
+		if ($theTravel->status == TravelStatus::CANCELLED || $theTravel->status == TravelStatus::DONE) {
+			throw  new CannotCancelFinishedTravelException();
+		}
 
-		if( $theTravel->status==TravelStatus::RUNNING){
-            throw  new CannotCancelRunningTravelException();
-        }
+		if ($theTravel->status == TravelStatus::RUNNING) {
+			throw  new CannotCancelRunningTravelException();
+		}
+
+		// to pass testCancelOnboardPassenger
+		// no need to check if travel is in RUNNING status
+		if ($theTravel->passengerIsInCar()) {
+			throw new CannotCancelRunningTravelException();
+		}
 
 		// if non of above is the case, cancel the travel
-		$theTravel->status=TravelStatus::CANCELLED->value;
-        $theTravel->save();
+		$theTravel->status = TravelStatus::CANCELLED->value;
+		$theTravel->save();
 		// return results
 		return TravelResource::make($theTravel);
 	}

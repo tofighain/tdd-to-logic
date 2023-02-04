@@ -137,23 +137,23 @@ class TravelControllerTest extends TestCase
             ));
     }
 
-    // public function testCancelOnboardPassenger()
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
+    public function testCancelOnboardPassenger()
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
 
-    //     $travel = $this->runningTravel($passenger, $driver)
-    //         ->has(TravelEvent::factory()->passengerOnBoard(), 'events')
-    //         ->create();
+        $travel = $this->runningTravel($passenger, $driver)
+            ->has(TravelEvent::factory()->passengerOnBoard(), 'events')
+            ->create();
 
-    //     foreach ([$passenger, $driver->user] as $user) {
-    //         Sanctum::actingAs($user);
-    //         $this->postJson("/api/travels/{$travel->id}/cancel")
-    //             ->assertStatus(400)
-    //             ->assertJson(array(
-    //                 "code" => "CannotCancelRunningTravel"
-    //             ));
-    //     }
-    // }
+        foreach ([$passenger, $driver->user] as $user) {
+            Sanctum::actingAs($user);
+            $this->postJson("/api/travels/{$travel->id}/cancel")
+                ->assertStatus(400)
+                ->assertJson(array(
+                    "code" => "CannotCancelRunningTravel"
+                ));
+        }
+    }
 
     // public function testCancelArrivedCar()
     // {
