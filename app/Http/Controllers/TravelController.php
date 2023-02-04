@@ -163,6 +163,11 @@ class TravelController extends Controller
 			DB::commit();
 		}
 
+		// can not take canceled travel
+		if($theTravel->status == TravelStatus::CANCELLED) {
+			throw new InvalidTravelStatusForThisActionException;
+		}
+
 		return TravelTakeResource::make($theTravel);
 
 	}

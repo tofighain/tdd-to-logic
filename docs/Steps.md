@@ -271,3 +271,16 @@ This test and multiple later ones, target **TravelControl@take** and try to mode
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: TravelControllerTest@testTake | Added: TravelTakeResource. Changed: TravelControllerTest. Changed: TravelController. Changed: todo.md.|
+
+
+###5.13. testTakeCancelledTravel
+based on this test driver can not take a cancelled travel. otherwise a specialized exception will be thrown (```InvalidTravelStatusForThisActionException```). 
+**optimization**: Because normal people don't send this kind of requests, i code it after 
+```php
+if($theTravel->status == TravelStatus::SEARCHING_FOR_DRIVER)
+```
+* Now is the time to commit the changes as below:
+    
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelControllerTest@testTakeCancelledTravel | Changed: TravelControllerTest. Changed: TravelController. |
