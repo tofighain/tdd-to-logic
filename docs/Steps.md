@@ -214,3 +214,14 @@ The test targets **TravelController@passengerOnBoard** which is a post request i
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: TravelControllerTest@testPassengerOnBoard | Changed: todo.md. Changed: TravelControllerTest. Changed: TravelController. Changed: TestingTravel. Changed: TravelEvent.|
+
+###5.6. testPassengerOnBoardAsPassenger
+this test is already passed bacause of the logic of previous test and reverse-engineering. so no need of version-controlling here. 
+
+###5.7. testPassengerOnBoardWhenCarIsNotArrived
+the test like its predecessors targets **TravelController@passengerOnBoard**. Note that if we check if ```driverHasArrivedToOrigin``` **before** ```passengerIsInCar``` the logic of the program would be in compliance with the test cases otherwise it is not the case.
+* Now is the time to commit the changes as below:
+    
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelControllerTest@testPassengerOnBoardWhenCarIsNotArrived and testPassengerOnBoardAsPassenger | Changed: TravelControllerTest. Changed: TravelController.|

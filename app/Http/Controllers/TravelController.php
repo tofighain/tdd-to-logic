@@ -7,6 +7,7 @@ use App\Enums\TravelStatus;
 use App\Exceptions\ActiveTravelException;
 use App\Exceptions\CannotCancelFinishedTravelException;
 use App\Exceptions\CannotCancelRunningTravelException;
+use App\Exceptions\CarDoesNotArrivedAtOriginException;
 use App\Exceptions\InvalidTravelStatusForThisActionException;
 use App\Http\Requests\TravelStoreRequest;
 use App\Http\Resources\TravelResource;
@@ -89,6 +90,12 @@ class TravelController extends Controller
 		if(!Driver::isDriver($driver) ) return abort(403);
 
 		$theTravel = Travel::where([['id', '=', $travel], ['driver_id', '=', $driver->id]])->with(['events'])->firstOrFail();
+		// to pass testPassengerOnBoardWhenCarIsNotArrived, 
+		// should be checked before checking passanger is checked.
+		if (!$theTravel->driverHasArrivedToOrigin()) {
+			throw new CarDoesNotArrivedAtOriginException();
+		}
+		
 		$isPassangerInTheCar = $theTravel->passengerIsInCar();
 		
 		// change the status of the last event as passanger is on board
@@ -97,6 +104,9 @@ class TravelController extends Controller
 		}else {
 			throw new InvalidTravelStatusForThisActionException();
 		}
+
+		
+
 
 		return TravelResource::make($theTravel);
 	}

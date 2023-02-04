@@ -220,27 +220,27 @@ class TravelControllerTest extends TestCase
             ));
     }
 
-    // public function testPassengerOnBoardAsPassenger()
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
-    //     $travel = $this->runningTravel($passenger, $driver)->create();
+    public function testPassengerOnBoardAsPassenger()
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
+        $travel = $this->runningTravel($passenger, $driver)->create();
 
-    //     Sanctum::actingAs($passenger);
-    //     $this->postJson("/api/travels/{$travel->id}/passenger-on-board")->assertStatus(403);
-    // }
+        Sanctum::actingAs($passenger);
+        $this->postJson("/api/travels/{$travel->id}/passenger-on-board")->assertStatus(403);
+    }
 
-    // public function testPassengerOnBoardWhenCarIsNotArrived()
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
-    //     $travel = $this->runningTravel($passenger, $driver, false)->create();
-
-    //     Sanctum::actingAs($driver->user);
-    //     $this->postJson("/api/travels/{$travel->id}/passenger-on-board")
-    //         ->assertStatus(400)
-    //         ->assertJson(array(
-    //             'code' => 'CarDoesNotArrivedAtOrigin'
-    //         ));
-    // }
+    public function testPassengerOnBoardWhenCarIsNotArrived()
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
+        $travel = $this->runningTravel($passenger, $driver, false)->create();
+        
+        Sanctum::actingAs($driver->user);
+        $this->postJson("/api/travels/{$travel->id}/passenger-on-board")
+            ->assertStatus(400)
+            ->assertJson(array(
+                'code' => 'CarDoesNotArrivedAtOrigin'
+            ));
+    }
 
     // public function testPassengerOnBoardFinishedTravel()
     // {
