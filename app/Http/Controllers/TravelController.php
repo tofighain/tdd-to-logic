@@ -117,8 +117,25 @@ class TravelController extends Controller
 		return TravelResource::make($theTravel);
 	}
 
-	public function done()
+	public function done(Request $request, $travel)
 	{
+		$driver = $request->user();
+		// check if the user is indeed a driver otherwise abort the request
+		if(!Driver::isDriver($driver) ) return abort(403);
+		//recreate the travel object from $travel (travel_id)
+		$theTravel = Travel::where([['id', '=', $travel], ['driver_id', '=', $driver->id]])->with(['events'])->firstOrFail();
+		if($theTravel->status == TravelStatus::RUNNING) {
+			DB::beginTransaction();
+				$theTravel->status = TravelStatus::DONE;
+				$theTravel->save();
+				$theTravel->events()->create(['type' => TravelEventType::DONE]);
+			DB::commit();
+			// return results
+			return TravelResource::make($theTravel);
+		}
+		// here, the else block is not needed.
+		throw new InvalidTravelStatusForThisActionException;
+
 	}
 
 	public function take()

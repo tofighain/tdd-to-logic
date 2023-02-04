@@ -255,37 +255,37 @@ class TravelControllerTest extends TestCase
             ));
     }
 
-    // public function testDone()
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
-    //     $travel = $this->runningTravel($passenger, $driver, true, true)
-    //         ->has(TravelEvent::factory()->passengerOnBoard(), 'events')
-    //         ->create();
+    public function testDone()
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
+        $travel = $this->runningTravel($passenger, $driver, true, true)
+            ->has(TravelEvent::factory()->passengerOnBoard(), 'events')
+            ->create();
+        
+        Sanctum::actingAs($driver->user);
+        $response = $this->postJson("/api/travels/{$travel->id}/done")
+            ->assertStatus(200)
+            ->assertJson(array(
+                "travel" => array(
+                    "status" => TravelStatus::DONE->value,
+                )
+            ));
 
-    //     Sanctum::actingAs($driver->user);
-    //     $response = $this->postJson("/api/travels/{$travel->id}/done")
-    //         ->assertStatus(200)
-    //         ->assertJson(array(
-    //             "travel" => array(
-    //                 "status" => TravelStatus::DONE->value,
-    //             )
-    //         ));
+        $found = false;
+        foreach ($response['travel']['events'] as $e) {
+            if ($e['type'] == TravelEventType::DONE->value) {
+                $found = true;
+                break;
+            }
+        }
+        $this->assertTrue($found);
 
-    //     $found = false;
-    //     foreach ($response['travel']['events'] as $e) {
-    //         if ($e['type'] == TravelEventType::DONE->value) {
-    //             $found = true;
-    //             break;
-    //         }
-    //     }
-    //     $this->assertTrue($found);
-
-    //     $this->postJson("/api/travels/{$travel->id}/done")
-    //         ->assertStatus(400)
-    //         ->assertJson(array(
-    //             'code' => 'InvalidTravelStatusForThisAction'
-    //         ));
-    // }
+        $this->postJson("/api/travels/{$travel->id}/done")
+            ->assertStatus(400)
+            ->assertJson(array(
+                'code' => 'InvalidTravelStatusForThisAction'
+            ));
+    }
 
     // public function testDoneAsPassenger()
     // {

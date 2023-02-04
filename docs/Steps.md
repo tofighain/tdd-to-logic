@@ -125,16 +125,16 @@ In order to complete **TravelController** i ommit 2.2. tests for now.
 
 ###5.1 testStore
 testStore targets **TravelController@store** method. 
-    - There is a TravelStoreRequest class to handle these types of request, so I typehint it in the store methode. 
-    - Reverse engineering shows the authenticated passenger can create the travel, I get it from $request->user().
-    - TravelResource can not be used for store method output. So TravelStoreResource is devised to format the output.
-    - Spots are given by $request, if not fill them with empty array for furthur inspections.
-    - It should be checked if current user (passanger) can take a new travel (he/she has already taken a travel). If so an exception of type **ActiveTravelException** should be thrown. Because usually users act normally, this exception should be thrown after checking that the user didn't act normally (**optimization**)
-    - Because each travel at least consists of two spots, and these spots should be store inside database and also other information of travel should be stored seperately, using **transaction** is highly recommanded. 
-    - the status of the user should be **SEARCHING_FOR_DRIVER** at this initial stage.
-    - the f...ing ```status``` should be added to fillable property of the Travel model. So i can use mass assignment. (I could use save method but that is slower than create static call and that's not my style.) Also ```passenger_id``` is added to the fillable.
-    - ```position, latitude, longitude``` should be added to fillables of **TravelSpot** model. (Only to save some millisecods, and also in compliance of my codding style)
-    * Now is the time to commit the changes as below:
+- There is a TravelStoreRequest class to handle these types of request, so I typehint it in the store methode. 
+- Reverse engineering shows the authenticated passenger can create the travel, I get it from ```$request->user()```.
+- TravelResource can not be used for store method output. So TravelStoreResource is devised to format the output.
+- Spots are given by $request, if not fill them with empty array for furthur inspections.
+- It should be checked if current user (passanger) can take a new travel (he/she has already taken a travel). If so an exception of type **ActiveTravelException** should be thrown. Because usually users act normally, this exception should be thrown after checking that the user didn't act normally (**optimization**)
+- Because each travel at least consists of two spots, and these spots should be store inside database and also other information of travel should be stored seperately, using **transaction** is highly recommanded. 
+- the status of the user should be **SEARCHING_FOR_DRIVER** at this initial stage.
+- the f...ing ```status``` should be added to fillable property of the Travel model. So i can use mass assignment. (I could use save method but that is slower than create static call and that's not my style.) Also ```passenger_id``` is added to the fillable.
+- ```position, latitude, longitude``` should be added to fillables of **TravelSpot** model. (Only to save some millisecods, and also in compliance of my codding style)
+* Now is the time to commit the changes as below:
     
 | git message    | what have i done |
 |----------------|:-----------------|
@@ -232,3 +232,18 @@ If the travel is finished, no one allowed to check if somebody is on board. **IS
 | git message    | what have i done |
 |----------------|:-----------------|
 | finished: all tests of passengerOnBoard method is finished. test passed: TravelControllerTest@testPassengerOnBoardFinishedTravel | Changed: TravelControllerTest. Changed: TravelController. Changed: todo.md|
+
+###5.9. testDone
+It targets **/travels/{travel}/done** of api routes and **TravelController@done()** method in the controller. **several matters are tested in this single method, that may not be a good Idea**. 
+Based on the test setup and the first assertion:
+ - driver can mark a travel as done. 
+ - because the end of the travel should have effects in both travel and travel event entities, using **trasaction** is advised. 
+Based on the second assertion:
+ - when a travel is done, as mentioned earlier, a travel event entity with the status of DONE should be created. (done in previous assertion)
+Based on the third assertion:
+ - it should be checked if the travel is not in ```DONE, SEARCHING_FOR_DRIVER, CANCELLED``` states. The only status that can be transformed to ```DONE``` is ```RUNNING```.
+* Now is the time to commit the changes as below:
+    
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelControllerTest@testDone | Changed: TravelControllerTest. Changed: TravelController. Changed: todo.md|
