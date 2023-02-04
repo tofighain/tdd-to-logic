@@ -176,3 +176,11 @@ this test targets **TravelController@cancel** in route */travels/{travel}/cancel
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: TravelControllerTest@testCancelOnboardPassenger | Changed: todo.md. Changed: TravelControllerTest. Changed: TravelController|
+
+###5.4. testCancelArrivedCar
+As it is stated in TestingTravel concerns, **users can not cancel** an already running travel. Also based on the test method **drivers can cancel** an already running travel. This test should be considered for more improvements. 
+* Now is the time to commit the changes as below:
+    
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelControllerTest@testCancelArrivedCar | Changed: todo.md. Changed: TravelControllerTest. Changed: TravelController|

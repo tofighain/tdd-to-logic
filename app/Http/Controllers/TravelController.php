@@ -9,6 +9,7 @@ use App\Exceptions\CannotCancelRunningTravelException;
 use App\Http\Requests\TravelStoreRequest;
 use App\Http\Resources\TravelResource;
 use App\Http\Resources\TravelStoreResource;
+use App\Models\Driver;
 use App\Models\Travel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -53,8 +54,9 @@ class TravelController extends Controller
 			throw  new CannotCancelFinishedTravelException();
 		}
 
-		if ($theTravel->status == TravelStatus::RUNNING) {
-			throw  new CannotCancelRunningTravelException();
+		// passanger cannot cancel a running travel but drivers can
+		if ( !Driver::isDriver($user) && $theTravel->status === TravelStatus::RUNNING ) {
+			throw new CannotCancelRunningTravelException();
 		}
 
 		// to pass testCancelOnboardPassenger
@@ -62,6 +64,9 @@ class TravelController extends Controller
 		if ($theTravel->passengerIsInCar()) {
 			throw new CannotCancelRunningTravelException();
 		}
+
+		
+		
 
 		// if non of above is the case, cancel the travel
 		$theTravel->status = TravelStatus::CANCELLED->value;

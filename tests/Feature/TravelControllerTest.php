@@ -155,28 +155,28 @@ class TravelControllerTest extends TestCase
         }
     }
 
-    // public function testCancelArrivedCar()
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
-    //     $travel = $this->runningTravel($passenger, $driver)->create();
+    public function testCancelArrivedCar()
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
+        $travel = $this->runningTravel($passenger, $driver)->create();
 
-    //     Sanctum::actingAs($passenger);
-    //     $this->postJson("/api/travels/{$travel->id}/cancel")
-    //         ->assertStatus(400)
-    //         ->assertJson(array(
-    //             "code" => "CannotCancelRunningTravel"
-    //         ));
+        Sanctum::actingAs($passenger);
+        $this->postJson("/api/travels/{$travel->id}/cancel")
+            ->assertStatus(400)
+            ->assertJson(array(
+                "code" => "CannotCancelRunningTravel"
+            ));
 
 
-    //     Sanctum::actingAs($driver->user);
-    //     $this->postJson("/api/travels/{$travel->id}/cancel")
-    //         ->assertStatus(200)
-    //         ->assertJson(array(
-    //             "travel" => array(
-    //                 'status' => TravelStatus::CANCELLED->value
-    //             )
-    //         ));
-    // }
+        Sanctum::actingAs($driver->user);
+        $this->postJson("/api/travels/{$travel->id}/cancel")
+        ->assertStatus(200)
+        ->assertJson(array(
+            "travel" => array(
+                'status' => TravelStatus::CANCELLED->value
+            )
+        ));
+    }
 
     // public function testView()
     // {
@@ -345,7 +345,7 @@ class TravelControllerTest extends TestCase
     //         ->withDriver($driver)
     //         ->running()
     //         ->create();
-        
+
     //     $travel = Travel::factory()->searchingForDriver()->create();
 
     //     Sanctum::actingAs($driver->user);

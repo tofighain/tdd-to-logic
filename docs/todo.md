@@ -9,4 +9,5 @@
     - use better naming convensions and follow them stricktly. for example use ```passengerIsOnBoard``` instead of ```passengerIsInCar```.
 
 - # FURTHER STUDIES (NOTE)
+    - Write a better ```TravelControllerTest@testCancelArrivedCar``` test.
 
