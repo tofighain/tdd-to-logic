@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Enums\TravelStatus;
 use App\Exceptions\InvalidTravelStatusForThisActionException;
 use App\Exceptions\SpotAlreadyPassedException;
+use App\Http\Requests\TravelSpotStoreRequest;
 use App\Http\Resources\TravelResource;
 use App\Models\Driver;
 use App\Models\Travel;
+use App\Models\TravelSpot;
 use Illuminate\Http\Request;
 
 class TravelSpotController extends Controller
@@ -34,8 +36,31 @@ class TravelSpotController extends Controller
 		return TravelResource::make($theTravel);
 	}
 
-	public function store()
+	public function store(TravelSpotStoreRequest $request, $travel)
 	{
+		$passanger = $request->user();
+		// check if the user is indeed a passanger otherwise abort the request
+		if(Driver::isDriver($passanger) ) return abort(403);
+		
+
+		// add the spot to the travel spots
+		// dd($request->all());
+		// dd($request->$request->only("latitude", "longitude", "position"));
+		// dd($theTravel->spots);
+		
+		// based on noted i documented in todo.md i increment the position 
+		// by one instead of trusting user input. 
+		$latestPositionOfTravel = TravelSpot::where('travel_id', $travel)->max('position');
+		TravelSpot::create([
+			"travel_id" => $travel,
+			"latitude" => $request->latitude , 
+			"longitude" => $request->longitude , 
+			"position" => $latestPositionOfTravel +1,
+		]);
+		// refresh and recreate the travel
+		$theTravel = Travel::where('id', '=', $travel)->firstOrFail();
+		return TravelResource::make($theTravel);
+
 	}
 
 	public function destroy()

@@ -83,31 +83,39 @@ class TravelSpotControllerTest extends TestCase
             ));
     }
 
-    // public function testStore(): void
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
-    //     $travel = $this->runningTravel($passenger, $driver, false)->create();
+    public function testStore(): void
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
+        $travel = $this->runningTravel($passenger, $driver, false)->create();
 
-    //     Sanctum::actingAs($passenger);
-    //     $latitude = fake()->randomFloat(5, 32.64517, 32.65077);
-    //     $longitude = fake()->randomFloat(5, 51.66532, 51.670368);
-    //     $response = $this->postJson("/api/travels/{$travel->id}/spots", array(
-    //         'latitude' => $latitude,
-    //         'longitude' => $longitude,
-    //         'position' => 1,
-    //     ))
-    //         ->assertStatus(200);
-
-    //     foreach ($response['travel']['spots'] as $spot) {
-    //         if ($spot['position'] == 1) {
-    //             $this->assertSame($latitude, $spot['latitude']);
-    //             $this->assertSame($longitude, $spot['longitude']);
-    //             break;
-    //         }
-    //     }
+        // dd($travel); // status of RUNNING
+        Sanctum::actingAs($passenger);
+        $latitude = fake()->randomFloat(5, 32.64517, 32.65077);
+        $longitude = fake()->randomFloat(5, 51.66532, 51.670368);
+        $response = $this->postJson("/api/travels/{$travel->id}/spots", array(
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+            'position' => 1,
+        ))->assertStatus(200);
         
-    //     $this->assertPositionsInRange(3, $response['travel']['spots']);
-    // }
+        // dd($response['travel']);
+
+        foreach ($response['travel']['spots'] as $spot) {
+            // print_r([
+            //     "id" => $spot["id"],
+            //     "position" => $spot["position"],
+            //     "sent_lat" => $latitude,
+            //     "recieved_lat" => $spot['latitude']
+            // ]);
+            if ($spot['position'] == 2) {
+                $this->assertSame($latitude, $spot['latitude']);
+                $this->assertSame($longitude, $spot['longitude']);
+                break;
+            }
+        }
+        
+        $this->assertPositionsInRange(3, $response['travel']['spots']);
+    }
 
     // public function testStoreAsDriver(): void
     // {
@@ -257,11 +265,11 @@ class TravelSpotControllerTest extends TestCase
     //         ));
     // }
 
-    // protected function assertPositionsInRange(int $expactedSpots, array $spots): void {
-    //     $this->assertCount($expactedSpots, $spots);
+    protected function assertPositionsInRange(int $expactedSpots, array $spots): void {
+        $this->assertCount($expactedSpots, $spots);
 
-    //     $positions = array_column($spots, 'position');
-    //     sort($positions);
-    //     $this->assertSame(range(0, $expactedSpots - 1), $positions);
-    // }
+        $positions = array_column($spots, 'position');
+        sort($positions);
+        $this->assertSame(range(0, $expactedSpots - 1), $positions);
+    }
 }

@@ -376,3 +376,17 @@ if($theTravel->status != TravelStatus::RUNNING)
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: TravelSpotControllerTest@testArrivedWhenAlreadyArrived | Changed: TravelSpotControllerTest. Changed: TravelSpotController. |
+
+###6.5. testStore()
+It tragets, **TravelSpotController@store** using post method.
+    - the ```assertPositionsInRange``` should be uncommented. 
+    - In addition to ```Request $request``` travel_id also should be added in args of ```store``` method.
+    - passanger only can store/ create a travel spot. 
+    - to store travel spots there is a specialized class: **TravelSpotStoreRequest** so instead of **Request** this would be injected. 
+    - the first assertion implies that a user can store a travel spot with the **position of 1 twice**, but that is not the case for the second and the third one. I added this issue in my concerns in todo.md. And I changed ```$spot['position'] == 1``` to ```$spot['position'] == 2```. I also changed the controller to fix the issue. 
+
+* Now is the time to commit the changes as below:
+    
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelSpotControllerTest@testStore | Changed: TravelSpotControllerTest. Changed: TravelSpotController. Changed: todo.md. Changed: TravelSpot|

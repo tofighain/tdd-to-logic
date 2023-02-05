@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class TravelSpot extends Model
 {
     use HasFactory;
-    protected $fillable = ['position', 'latitude', 'longitude'];
+    protected $fillable = ['travel_id', 'position', 'latitude', 'longitude'];
 
     protected $table = "travels_spots";
 

@@ -3,6 +3,7 @@
     - In **testPassengerOnBoardFinishedTravel** test case, is it a good practice to prevent users to check for onboard passangers, if it is already finished ?
     - In cancel method both of the passanger and driver could mark a travel as canceled, but only the driver may mark the travel as done. why ?
     - based on **TravelControllerTest@testTake** after trying to take the travel, driver_id is updated but the status remains ```SEARCHING_FOR_DRIVER```. why ?
+    - In **TravelSpotControllerTest@testStore** the first assertion implies that a user can store a travel spot with the **position of 1 twice**, but that is not the case for the second and the third one. 
 
 - # TO DO (MUST)
     - **Add: ```setPasswordAttribute```** method in User class, so the password be mutated without doning anything in the controller
