@@ -66,6 +66,9 @@ class TravelSpotController extends Controller
 			throw new SpotAlreadyPassedException();
 		}
 
+		if($theTravel->status != TravelStatus::RUNNING)
+			throw new InvalidTravelStatusForThisActionException();
+
 		TravelSpot::create([
 			"travel_id" => $travel,
 			"latitude" => $request->latitude , 

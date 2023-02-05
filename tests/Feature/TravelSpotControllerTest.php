@@ -165,22 +165,22 @@ class TravelSpotControllerTest extends TestCase
             ));
     }
 
-    // public function testStoreNotRunningTravel(): void
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
-    //     $travel = $this->runningTravel($passenger, $driver, false)->cancelled()->create();
+    public function testStoreNotRunningTravel(): void
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
+        $travel = $this->runningTravel($passenger, $driver, false)->cancelled()->create();
 
-    //     Sanctum::actingAs($passenger);
-    //     $this->postJson("/api/travels/{$travel->id}/spots", array(
-    //         'latitude' => fake()->randomFloat(5, 32.64517, 32.65077),
-    //         'longitude' => fake()->randomFloat(5, 51.66532, 51.670368),
-    //         'position' => 1,
-    //     ))
-    //         ->assertStatus(400)
-    //         ->assertJson(array(
-    //             'code' => 'InvalidTravelStatusForThisAction'
-    //         ));
-    // }
+        Sanctum::actingAs($passenger);
+        $this->postJson("/api/travels/{$travel->id}/spots", array(
+            'latitude' => fake()->randomFloat(5, 32.64517, 32.65077),
+            'longitude' => fake()->randomFloat(5, 51.66532, 51.670368),
+            'position' => 1,
+        ))
+            ->assertStatus(400)
+            ->assertJson(array(
+                'code' => 'InvalidTravelStatusForThisAction'
+            ));
+    }
 
     // public function testDestroy(): void
     // {

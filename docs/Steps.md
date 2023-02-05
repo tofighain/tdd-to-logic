@@ -414,3 +414,11 @@ if ($theTravel->allSpotsPassed()) {
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: TravelSpotControllerTest@testStoreArrived | Changed: TravelSpotControllerTest. Changed: TravelSpotController.|
+
+###6.8. testStoreNotRunningTravel
+If it is not a travel with ```RUNNING``` status, so passanger is unable to add spots to it. 
+
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelSpotControllerTest@testStoreNotRunningTravel | Changed: TravelSpotControllerTest. Changed: TravelSpotController.|
+
