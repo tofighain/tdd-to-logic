@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Enums\DriverStatus;
+use App\Enums\TravelStatus;
 use App\Http\Requests\DriverSignupRequest;
+use App\Http\Requests\DriverUpdateRequest;
 use App\Http\Resources\DriverResource;
+use App\Http\Resources\DriverUpdateResource;
+use App\Http\Resources\TravelResource;
 use App\Models\Driver;
+use App\Models\Travel;
 
 class DriverController extends Controller
 {
@@ -43,7 +48,22 @@ class DriverController extends Controller
 		// no need for else block here !
 	}
 
-	public function update()
+	public function update(DriverUpdateRequest $request)
 	{
+		$driver = $request->user();
+		// extra layer of security
+		$theDriver = Driver::where('id', $driver->id)->firstOrFail();
+		$theDriver->latitude = $request->latitude;
+		$theDriver->longitude = $request->longitude;
+		$theDriver->status = $request->status;
+		$theDriver->save();
+
+		// getting pending travels
+		$pending_travels = Travel::where('status', TravelStatus::SEARCHING_FOR_DRIVER->value)->with('spots')->get();
+		return response()->json([
+			"driver" => $theDriver, 
+			"travels" => $pending_travels
+		], 200);
+
 	}
 }

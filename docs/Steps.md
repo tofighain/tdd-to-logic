@@ -111,7 +111,20 @@ b) we should check for 2 things in driver ```signup``` method
 
 
 ###2.2. testUpdate
-In this stage, because Travel controller is not defined, I omit the test for now, and work on passing Travel and TravelEvent unit tests.
+*[**DEPRICATED NOTES**: In this stage, because Travel controller is not defined, I omit the test for now, and work on passing Travel and TravelEvent unit tests.]*
+* **Note**: Several assertion in one test method is not a good practice.
+
+Based on the test below states can be inferred:
+- if a request of put type goes into **/api/driver** with the **new data** of a driver it should update the driver and returns updated driver.
+- it also reveals that only the drivers can update their own data.
+- there are 3 travel, 2 of them are pending and driver can pick them. 
+- the pending travels are the same as factory is defined. 
+
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: DriverControllerTest@testUpdate | Changed: DriverController@signup. Changed:DriverControllerTest@testUpdate|
+
+
 
 ##3. TravelTest
 The only TravelTest method is testRelations. Which the other team members have done the job by creating a greate Travel eloquent model. I did nothing here so, there would be no version controlling here. 
@@ -295,3 +308,6 @@ This test aims to prevent drivers who already are in a travel.
 | git message    | what have i done |
 |----------------|:-----------------|
 | finished: all tests of TravelController are passed.  test passed: TravelControllerTest@testTakeWithActiveTravel | Changed: TravelControllerTest. Changed: TravelController. |
+
+*at this stage i will finish the DriverControllerTest but it is documented in section 2.2. look at the git changes to know more.
+
