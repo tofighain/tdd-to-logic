@@ -238,19 +238,19 @@ class TravelSpotControllerTest extends TestCase
             ));
     }
 
-    // public function testDestroyOrigin(): void
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
-    //     $travel = $this->runningTravel($passenger, $driver, false)->create();
-    //     $spot = $travel->getOriginSpot();
+    public function testDestroyOrigin(): void
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
+        $travel = $this->runningTravel($passenger, $driver, false)->create();
+        $spot = $travel->getOriginSpot();
     
-    //     Sanctum::actingAs($passenger);
-    //     $this->deleteJson("/api/travels/{$travel->id}/spots/{$spot->id}")
-    //         ->assertStatus(400)
-    //         ->assertJson(array(
-    //             'code' => 'ProtectedSpot'
-    //         ));
-    // }
+        Sanctum::actingAs($passenger);
+        $this->deleteJson("/api/travels/{$travel->id}/spots/{$spot->id}")
+            ->assertStatus(400)
+            ->assertJson(array(
+                'code' => 'ProtectedSpot'
+            ));
+    }
 
     // public function testDestroyLastSpot(): void
     // {

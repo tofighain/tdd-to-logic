@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\TravelStatus;
 use App\Exceptions\InvalidTravelStatusForThisActionException;
+use App\Exceptions\ProtectedSpotException;
 use App\Exceptions\SpotAlreadyPassedException;
 use App\Http\Requests\TravelSpotStoreRequest;
 use App\Http\Resources\TravelResource;
@@ -93,7 +94,11 @@ class TravelSpotController extends Controller
 		if($theTravel->status != TravelStatus::RUNNING)
 			throw new InvalidTravelStatusForThisActionException();
 		
-		TravelSpot::where([['travel_id', '=', $travel],['id', '=', $spot]])->delete();
+		$theSpot = TravelSpot::where([['travel_id', '=', $travel],['id', '=', $spot]])->firstOrFail();
+		if ($theSpot->position == 0)
+				throw new ProtectedSpotException();
+		
+		$theSpot->delete();
 		TravelSpot::where([['travel_id', '=', $travel],['id', '>', $spot]])->decrement('position');
 		return TravelResource::make($theTravel);
 	}

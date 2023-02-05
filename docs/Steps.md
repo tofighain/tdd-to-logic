@@ -453,3 +453,10 @@ if ($theTravel->allSpotsPassed())
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: TravelSpotControllerTest@testDestroyArrived | Changed: TravelSpotControllerTest. Changed: TravelSpotController.|
+
+
+###6.11. testDestroyOrigin
+Passanger can not delete the origin (first spot).
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelSpotControllerTest@testDestroyOrigin | Changed: TravelSpotControllerTest. Changed: TravelSpotController.|
