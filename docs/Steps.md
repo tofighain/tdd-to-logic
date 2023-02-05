@@ -333,3 +333,23 @@ Below are the assumptions that can be extracted from the test:
 |----------------|:-----------------|
 | test passed: TravelSpotControllerTest@testArrived | Changed: TravelSpotControllerTest. Changed: TravelSpotController. |
 
+###6.2. testArrivedAsPassenger()
+the whole test is similar to the third assertion of previous test:
+```php
+Sanctum::actingAs($passenger);
+$response = $this->postJson("/api/travels/{$travel->id}/spots/{$origin->id}/arrived")
+    ->assertStatus(403);
+```
+and it is passed already. So no need for version-controlling.
+
+###6.3. testArrivedNotRunningTravel()
+Again it targets and from the test below could be understood:
+    - travel with status of CANCELLED is feeded to the api
+    - drivers may check the endpoint
+    - If travel is cancelled an exception should be thrown from ```InvalidTravelStatusForThisActionException``` exception class.
+    - the check should be perform after recreating the travel.
+* Now is the time to commit the changes as below:
+    
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelSpotControllerTest@testArrivedNotRunningTravel and  TravelSpotControllerTest@testArrivedAsPassenger | Changed: TravelSpotControllerTest. Changed: TravelSpotController. |

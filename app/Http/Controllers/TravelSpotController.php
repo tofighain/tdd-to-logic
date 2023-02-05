@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\TravelStatus;
+use App\Exceptions\InvalidTravelStatusForThisActionException;
 use App\Http\Resources\TravelResource;
 use App\Models\Driver;
 use App\Models\Travel;
@@ -16,6 +18,10 @@ class TravelSpotController extends Controller
 		if(!Driver::isDriver($driver) ) return abort(403);
 		$theTravel = Travel::where('id', '=', $travel)->firstOrFail();
 
+		if($theTravel->status == TravelStatus::CANCELLED) 
+			throw new InvalidTravelStatusForThisActionException();
+		
+		
 		// fill arrived time to the origin arrived_at
 		// recreate origin:
 		$origin = $theTravel->getOriginSpot();

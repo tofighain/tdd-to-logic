@@ -41,30 +41,31 @@ class TravelSpotControllerTest extends TestCase
             ->assertStatus(403);
     }
 
-    // public function testArrivedAsPassenger(): void
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
-    //     $travel = $this->runningTravel($passenger, $driver, false)->create();
-    //     $origin = $travel->getOriginSpot();
+    public function testArrivedAsPassenger(): void
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
+        $travel = $this->runningTravel($passenger, $driver, false)->create();
+        $origin = $travel->getOriginSpot();
 
-    //     Sanctum::actingAs($passenger);
-    //     $this->postJson("/api/travels/{$travel->id}/spots/{$origin->id}/arrived")
-    //         ->assertStatus(403);
-    // }
+        Sanctum::actingAs($passenger);
+        $this->postJson("/api/travels/{$travel->id}/spots/{$origin->id}/arrived")
+            ->assertStatus(403);
+    }
 
-    // public function testArrivedNotRunningTravel(): void
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
-    //     $travel = $this->runningTravel($passenger, $driver, false)->cancelled()->create();
-    //     $origin = $travel->getOriginSpot();
-
-    //     Sanctum::actingAs($driver->user);
-    //     $this->postJson("/api/travels/{$travel->id}/spots/{$origin->id}/arrived")
-    //         ->assertStatus(400)
-    //         ->assertJson(array(
-    //             'code' => 'InvalidTravelStatusForThisAction'
-    //         ));
-    // }
+    public function testArrivedNotRunningTravel(): void
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
+        $travel = $this->runningTravel($passenger, $driver, false)->cancelled()->create();
+        $origin = $travel->getOriginSpot();
+        // dd($travel);
+        // travel with status of CANCELLED is feeded to the api
+        Sanctum::actingAs($driver->user);
+        $this->postJson("/api/travels/{$travel->id}/spots/{$origin->id}/arrived")
+            ->assertStatus(400)
+            ->assertJson(array(
+                'code' => 'InvalidTravelStatusForThisAction'
+            ));
+    }
 
     // public function testArrivedWhenAlreadyArrived(): void
     // {
