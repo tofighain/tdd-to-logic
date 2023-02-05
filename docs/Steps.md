@@ -311,3 +311,25 @@ This test aims to prevent drivers who already are in a travel.
 
 *at this stage i will finish the DriverControllerTest but it is documented in section 2.2. look at the git changes to know more.
 
+##6. TravelSpotControllerTest
+All tests in this section targets travel's spot entity in **TravelSpotController**
+
+###6.1. testArrived()
+Below are the assumptions that can be extracted from the test:
+    - first assertion:
+        - **TravelSpotController@arrived** method is targeted.
+        - drivers can get the travel spot info.
+        - spot id and travel id should be added as get parameters to the ```arrived``` method.
+        - response should be loaded with travel's spots. that is provided before by **TravelResource** 
+    - second assertsion:
+        - the travel should include an origin spot (position 0)
+        - the spot arrived_at should be filled by current time stamp. (any time but logically current time is the correct time.)
+    - third assertion:
+        - only drivers can mark travel as arrived. 
+
+* Now is the time to commit the changes as below:
+    
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelSpotControllerTest@testArrived | Changed: TravelSpotControllerTest. Changed: TravelSpotController. |
+
