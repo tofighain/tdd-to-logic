@@ -213,30 +213,30 @@ class TravelSpotControllerTest extends TestCase
             ));
     }
 
-    // public function testDestroyAsDriver(): void
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
-    //     $travel = $this->runningTravel($passenger, $driver)->create();
-    //     $spot = $travel->spots()->where("position", 1)->firstOrFail();
+    public function testDestroyAsDriver(): void
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
+        $travel = $this->runningTravel($passenger, $driver)->create();
+        $spot = $travel->spots()->where("position", 1)->firstOrFail();
     
-    //     Sanctum::actingAs($driver->user);
-    //     $this->deleteJson("/api/travels/{$travel->id}/spots/{$spot->id}")
-    //         ->assertStatus(403);
-    // }
+        Sanctum::actingAs($driver->user);
+        $this->deleteJson("/api/travels/{$travel->id}/spots/{$spot->id}")
+            ->assertStatus(403);
+    }
 
-    // public function testDestroyArrived(): void
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
-    //     $travel = $this->runningTravel($passenger, $driver, true, true)->create();
-    //     $spot = $travel->spots()->where("position", 1)->firstOrFail();
+    public function testDestroyArrived(): void
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
+        $travel = $this->runningTravel($passenger, $driver, true, true)->create();
+        $spot = $travel->spots()->where("position", 1)->firstOrFail();
     
-    //     Sanctum::actingAs($passenger);
-    //     $this->deleteJson("/api/travels/{$travel->id}/spots/{$spot->id}")
-    //         ->assertStatus(400)
-    //         ->assertJson(array(
-    //             'code' => 'SpotAlreadyPassed'
-    //         ));
-    // }
+        Sanctum::actingAs($passenger);
+        $this->deleteJson("/api/travels/{$travel->id}/spots/{$spot->id}")
+            ->assertStatus(400)
+            ->assertJson(array(
+                'code' => 'SpotAlreadyPassed'
+            ));
+    }
 
     // public function testDestroyOrigin(): void
     // {

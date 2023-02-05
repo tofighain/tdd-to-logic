@@ -86,6 +86,10 @@ class TravelSpotController extends Controller
 		if(Driver::isDriver($passanger) ) return abort(403);
 
 		$theTravel = Travel::where('id', '=', $travel)->firstOrFail();
+		if ($theTravel->allSpotsPassed())
+			throw new SpotAlreadyPassedException();
+		
+
 		if($theTravel->status != TravelStatus::RUNNING)
 			throw new InvalidTravelStatusForThisActionException();
 		

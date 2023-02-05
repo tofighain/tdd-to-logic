@@ -439,3 +439,17 @@ when a travel is in ```RUNNING``` status, do deletion is allowed.
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: TravelSpotControllerTest@testDestroyNotRunningTravel | Changed: TravelSpotControllerTest. Changed: TravelSpotController.|
+
+###6.9. testDestroyNotRunningTravel
+This test already is checked and passed. 
+
+###6.10. testDestroyArrived
+This test is similar to the one for store and passed easily, using the same check:
+```php
+if ($theTravel->allSpotsPassed())
+	throw new SpotAlreadyPassedException();
+```
+
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelSpotControllerTest@testDestroyArrived | Changed: TravelSpotControllerTest. Changed: TravelSpotController.|
