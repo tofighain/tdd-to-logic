@@ -182,19 +182,20 @@ class TravelSpotControllerTest extends TestCase
             ));
     }
 
-    // public function testDestroy(): void
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
-    //     $travel = $this->runningTravel($passenger, $driver)
-    //         ->has(TravelSpot::factory()->withPosition(2), 'spots')
-    //         ->create();
-    //     $middleSpot = $travel->spots()->where("position", 1)->firstOrFail();
+    public function testDestroy(): void
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
+        $travel = $this->runningTravel($passenger, $driver)
+            ->has(TravelSpot::factory()->withPosition(2), 'spots')
+            ->create();
+        $middleSpot = $travel->spots()->where("position", 1)->firstOrFail();
     
-    //     Sanctum::actingAs($passenger);
-    //     $response = $this->deleteJson("/api/travels/{$travel->id}/spots/{$middleSpot->id}")
-    //         ->assertStatus(200);
-    //     $this->assertPositionsInRange(2, $response['travel']['spots']);
-    // }
+        Sanctum::actingAs($passenger);
+        $response = $this->deleteJson("/api/travels/{$travel->id}/spots/{$middleSpot->id}")
+            ->assertStatus(200);
+        // dd($response['travel']['spots']);
+        $this->assertPositionsInRange(2, $response['travel']['spots']);
+    }
 
     // public function testDestroyNotRunningTravel(): void
     // {

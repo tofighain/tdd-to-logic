@@ -422,3 +422,13 @@ If it is not a travel with ```RUNNING``` status, so passanger is unable to add s
 |----------------|:-----------------|
 | test passed: TravelSpotControllerTest@testStoreNotRunningTravel | Changed: TravelSpotControllerTest. Changed: TravelSpotController.|
 
+###6.7. testDestroy
+from now on, all test target **/travels/{travel}/spots/{spot}** using delete method. the method needs ```travel_id``` and ```spot_id``` to proccess requests. 
+    - the spot with provided ```travel_id``` and ```id``` should be delete.
+    - other later points should be decremented by one. below makes it work:
+```php
+TravelSpot::where([['travel_id', '=', $travel],['id', '>', $spot]])->decrement('position');
+```
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelSpotControllerTest@testDestroy | Changed: TravelSpotControllerTest. Changed: TravelSpotController.|

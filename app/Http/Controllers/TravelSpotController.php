@@ -79,7 +79,15 @@ class TravelSpotController extends Controller
 
 	}
 
-	public function destroy()
+	public function destroy(Request $request, $travel, $spot)
 	{
+		$passanger = $request->user();
+		// check if the user is indeed a passanger otherwise abort the request
+		if(Driver::isDriver($passanger) ) return abort(403);
+		
+		TravelSpot::where([['travel_id', '=', $travel],['id', '=', $spot]])->delete();
+		TravelSpot::where([['travel_id', '=', $travel],['id', '>', $spot]])->decrement('position');
+		$theTravel = Travel::where('id', '=', $travel)->firstOrFail();
+		return TravelResource::make($theTravel);
 	}
 }
