@@ -117,36 +117,36 @@ class TravelSpotControllerTest extends TestCase
         $this->assertPositionsInRange(3, $response['travel']['spots']);
     }
 
-    // public function testStoreAsDriver(): void
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
-    //     $travel = $this->runningTravel($passenger, $driver, false)->create();
+    public function testStoreAsDriver(): void
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
+        $travel = $this->runningTravel($passenger, $driver, false)->create();
 
-    //     Sanctum::actingAs($driver->user);
-    //     $latitude = fake()->randomFloat(5, 32.64517, 32.65077);
-    //     $longitude = fake()->randomFloat(5, 51.66532, 51.670368);
-    //     $this->postJson("/api/travels/{$travel->id}/spots", array(
-    //         'latitude' => $latitude,
-    //         'longitude' => $longitude,
-    //         'position' => 1,
-    //     ))
-    //         ->assertStatus(403);
-    // }
+        Sanctum::actingAs($driver->user);
+        $latitude = fake()->randomFloat(5, 32.64517, 32.65077);
+        $longitude = fake()->randomFloat(5, 51.66532, 51.670368);
+        $this->postJson("/api/travels/{$travel->id}/spots", array(
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+            'position' => 1,
+        ))
+            ->assertStatus(403);
+    }
 
-    // public function testStoreOutOfRange(): void
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
-    //     $travel = $this->runningTravel($passenger, $driver, false)->create();
+    public function testStoreOutOfRange(): void
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
+        $travel = $this->runningTravel($passenger, $driver, false)->create();
 
-    //     Sanctum::actingAs($passenger);
-    //     $this->postJson("/api/travels/{$travel->id}/spots", array(
-    //         'latitude' => fake()->randomFloat(5, 32.64517, 32.65077),
-    //         'longitude' => fake()->randomFloat(5, 51.66532, 51.670368),
-    //         'position' => 3,
-    //     ))
-    //         ->assertStatus(422)
-    //         ->assertJson(fn(AssertableJson $json) => $json->has("errors.position")->etc());
-    // }
+        Sanctum::actingAs($passenger);
+        $this->postJson("/api/travels/{$travel->id}/spots", array(
+            'latitude' => fake()->randomFloat(5, 32.64517, 32.65077),
+            'longitude' => fake()->randomFloat(5, 51.66532, 51.670368),
+            'position' => 3,
+        ))
+            ->assertStatus(422)
+            ->assertJson(fn(AssertableJson $json) => $json->has("errors.position")->etc());
+    }
 
     // public function testStoreArrived(): void
     // {

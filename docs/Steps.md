@@ -390,3 +390,16 @@ It tragets, **TravelSpotController@store** using post method.
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: TravelSpotControllerTest@testStore | Changed: TravelSpotControllerTest. Changed: TravelSpotController. Changed: todo.md. Changed: TravelSpot|
+
+###6.5. testStoreAsDriver()
+I passed this test before, so no need for version control.
+
+
+###6.6. testStoreOutOfRange
+This test says user can not ask to insert a spot with the position more than ```latestPositionOfTravel + 1 ``` otherwise an error should be returned with the status code of 422. 
+
+* Now is the time to commit the changes as below:
+    
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelSpotControllerTest@testStoreOutOfRange | Changed: TravelSpotControllerTest. Changed: TravelSpotController.|

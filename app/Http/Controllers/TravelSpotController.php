@@ -51,6 +51,15 @@ class TravelSpotController extends Controller
 		// based on noted i documented in todo.md i increment the position 
 		// by one instead of trusting user input. 
 		$latestPositionOfTravel = TravelSpot::where('travel_id', $travel)->max('position');
+
+		if ($request->position > $latestPositionOfTravel) {
+            return response()->json([
+                'errors' => [
+                    'position' => 'error'
+                ]
+            ], 422);
+        }
+
 		TravelSpot::create([
 			"travel_id" => $travel,
 			"latitude" => $request->latitude , 
