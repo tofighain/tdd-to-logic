@@ -339,21 +339,21 @@ class TravelControllerTest extends TestCase
             ));
     }
 
-    // public function testTakeWithActiveTravel()
-    // {
-    //     $driver = Driver::factory()->create();
-    //     Travel::factory()
-    //         ->withDriver($driver)
-    //         ->running()
-    //         ->create();
+    public function testTakeWithActiveTravel()
+    {
+        $driver = Driver::factory()->create();
+        Travel::factory()
+            ->withDriver($driver)
+            ->running()
+            ->create();
 
-    //     $travel = Travel::factory()->searchingForDriver()->create();
-
-    //     Sanctum::actingAs($driver->user);
-    //     $this->postJson("/api/travels/{$travel->id}/take")
-    //         ->assertStatus(400)
-    //         ->assertJson(array(
-    //             "code" => 'ActiveTravel'
-    //         ));
-    // }
+        $travel = Travel::factory()->searchingForDriver()->create();
+        
+        Sanctum::actingAs($driver->user);
+        $this->postJson("/api/travels/{$travel->id}/take")
+            ->assertStatus(400)
+            ->assertJson(array(
+                "code" => 'ActiveTravel'
+            ));
+    }
 }

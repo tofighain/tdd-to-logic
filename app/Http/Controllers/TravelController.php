@@ -150,6 +150,10 @@ class TravelController extends Controller
 		$driver = $request->user();
 		// check if the user is indeed a driver otherwise abort the request
 		if(!Driver::isDriver($driver) ) return abort(403);
+		// check if driver has not any active travels
+		if(Travel::userHasActiveTravel($driver)) {
+			throw new ActiveTravelException;
+		}
 		//recreate the travel object from $travel (travel_id)
 		$theTravel = Travel::where([['id', '=', $travel]])->firstOrFail();
 

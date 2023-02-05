@@ -284,3 +284,14 @@ if($theTravel->status == TravelStatus::SEARCHING_FOR_DRIVER)
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: TravelControllerTest@testTakeCancelledTravel | Changed: TravelControllerTest. Changed: TravelController. |
+
+###5.14. testTakeWithActiveTravel
+This test aims to prevent drivers who already are in a travel. 
+- **Optimization**: because the problem with multiple travels occurs to the drivers, so before even we recreate the travel from provided id, we can check this fact. but because we are going to use a static method in the **Travel** class instead of **User** or **Driver** model classes, again i suggest impelemting the check inside of **Driver** class. also using strategy DP is suggested to model users, drivers, and passangers.
+- we can check that the driver has active travels using ```userHasActiveTravel``` method. 
+
+* Now is the time to commit the changes as below:
+    
+| git message    | what have i done |
+|----------------|:-----------------|
+| finished: all tests of TravelController are passed.  test passed: TravelControllerTest@testTakeWithActiveTravel | Changed: TravelControllerTest. Changed: TravelController. |
