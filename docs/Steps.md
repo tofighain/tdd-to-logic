@@ -470,3 +470,16 @@ if ($theSpot->position == 0 || $theSpot->position == $theTravel->spots->max('pos
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: TravelSpotControllerTest@testDestroyLastSpot | Changed: TravelSpotControllerTest. Changed: TravelSpotController.|
+
+# E. FINAL WORDS
+That is about it. There are some concerns in my implementation that i stated in the todo.md. Also there are lots fields of imporvment like: 
+
+- DRY-ing my code, 
+- Using some service providers, 
+- Using a lot of repositories and interfaces.
+- Using code documenting tools like phpDocs. 
+
+Please note that my coding style differs based on **codebase**, **project requirments**, and **available time-budget**. Here I present my thinking style when I try to **turn designed tests to the program logic**, or better said, my **reverse-engineering skills**. Also it presents my sweet **addiction for documenting** my work. But it is not presenting my problem solving skills, my passion to work as a team memeber, and my love to discuss and cooperate in problem solving sessions.
+At the end i want to thank all, who read through this very long verbose load-thinking journal. 
+I also added a README.md file at the root directory of my project that presents the required results and reports. 
+**Regards and peace out everybody**, ```Ali``` :D
