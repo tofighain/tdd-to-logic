@@ -148,22 +148,22 @@ class TravelSpotControllerTest extends TestCase
             ->assertJson(fn(AssertableJson $json) => $json->has("errors.position")->etc());
     }
 
-    // public function testStoreArrived(): void
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
-    //     $travel = $this->runningTravel($passenger, $driver, true, true)->create();
-
-    //     Sanctum::actingAs($passenger);
-    //     $this->postJson("/api/travels/{$travel->id}/spots", array(
-    //         'latitude' => fake()->randomFloat(5, 32.64517, 32.65077),
-    //         'longitude' => fake()->randomFloat(5, 51.66532, 51.670368),
-    //         'position' => 1,
-    //     ))
-    //         ->assertStatus(400)
-    //         ->assertJson(array(
-    //             'code' => 'SpotAlreadyPassed'
-    //         ));
-    // }
+    public function testStoreArrived(): void
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
+        $travel = $this->runningTravel($passenger, $driver, true, true)->create();
+        // dd($travel->spots); // one travel with exactly two same spots
+        Sanctum::actingAs($passenger);
+        $this->postJson("/api/travels/{$travel->id}/spots", array(
+            'latitude' => fake()->randomFloat(5, 32.64517, 32.65077),
+            'longitude' => fake()->randomFloat(5, 51.66532, 51.670368),
+            'position' => 1,
+        ))
+            ->assertStatus(400)
+            ->assertJson(array(
+                'code' => 'SpotAlreadyPassed'
+            ));
+    }
 
     // public function testStoreNotRunningTravel(): void
     // {

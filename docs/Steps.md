@@ -403,3 +403,14 @@ This test says user can not ask to insert a spot with the position more than ```
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: TravelSpotControllerTest@testStoreOutOfRange | Changed: TravelSpotControllerTest. Changed: TravelSpotController.|
+
+###6.7. testStoreArrived
+user can not store a new spot if he/she already arrived there. so below will do the job:
+```php
+if ($theTravel->allSpotsPassed()) {
+    throw new SpotAlreadyPassedException();
+}
+```
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelSpotControllerTest@testStoreArrived | Changed: TravelSpotControllerTest. Changed: TravelSpotController.|

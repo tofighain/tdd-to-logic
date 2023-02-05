@@ -59,6 +59,12 @@ class TravelSpotController extends Controller
                 ]
             ], 422);
         }
+		// refresh and recreate the travel
+		$theTravel = Travel::where('id', '=', $travel)->firstOrFail();
+
+		if ($theTravel->allSpotsPassed()) {
+			throw new SpotAlreadyPassedException();
+		}
 
 		TravelSpot::create([
 			"travel_id" => $travel,
@@ -66,8 +72,6 @@ class TravelSpotController extends Controller
 			"longitude" => $request->longitude , 
 			"position" => $latestPositionOfTravel +1,
 		]);
-		// refresh and recreate the travel
-		$theTravel = Travel::where('id', '=', $travel)->firstOrFail();
 		return TravelResource::make($theTravel);
 
 	}
