@@ -432,3 +432,10 @@ TravelSpot::where([['travel_id', '=', $travel],['id', '>', $spot]])->decrement('
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: TravelSpotControllerTest@testDestroy | Changed: TravelSpotControllerTest. Changed: TravelSpotController.|
+
+###6.8. testDestroyNotRunningTravel
+when a travel is in ```RUNNING``` status, do deletion is allowed. 
+
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelSpotControllerTest@testDestroyNotRunningTravel | Changed: TravelSpotControllerTest. Changed: TravelSpotController.|

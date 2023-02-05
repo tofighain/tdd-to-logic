@@ -197,21 +197,21 @@ class TravelSpotControllerTest extends TestCase
         $this->assertPositionsInRange(2, $response['travel']['spots']);
     }
 
-    // public function testDestroyNotRunningTravel(): void
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
-    //     $travel = $this->runningTravel($passenger, $driver)
-    //         ->cancelled()
-    //         ->create();
-    //     $spot = $travel->spots()->where("position", 1)->firstOrFail();
+    public function testDestroyNotRunningTravel(): void
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
+        $travel = $this->runningTravel($passenger, $driver)
+            ->cancelled()
+            ->create();
+        $spot = $travel->spots()->where("position", 1)->firstOrFail();
     
-    //     Sanctum::actingAs($passenger);
-    //     $this->deleteJson("/api/travels/{$travel->id}/spots/{$spot->id}")
-    //         ->assertStatus(400)
-    //         ->assertJson(array(
-    //             'code' => 'InvalidTravelStatusForThisAction'
-    //         ));
-    // }
+        Sanctum::actingAs($passenger);
+        $this->deleteJson("/api/travels/{$travel->id}/spots/{$spot->id}")
+            ->assertStatus(400)
+            ->assertJson(array(
+                'code' => 'InvalidTravelStatusForThisAction'
+            ));
+    }
 
     // public function testDestroyAsDriver(): void
     // {

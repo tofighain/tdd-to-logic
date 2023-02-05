@@ -84,10 +84,13 @@ class TravelSpotController extends Controller
 		$passanger = $request->user();
 		// check if the user is indeed a passanger otherwise abort the request
 		if(Driver::isDriver($passanger) ) return abort(403);
+
+		$theTravel = Travel::where('id', '=', $travel)->firstOrFail();
+		if($theTravel->status != TravelStatus::RUNNING)
+			throw new InvalidTravelStatusForThisActionException();
 		
 		TravelSpot::where([['travel_id', '=', $travel],['id', '=', $spot]])->delete();
 		TravelSpot::where([['travel_id', '=', $travel],['id', '>', $spot]])->decrement('position');
-		$theTravel = Travel::where('id', '=', $travel)->firstOrFail();
 		return TravelResource::make($theTravel);
 	}
 }
