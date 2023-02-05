@@ -252,19 +252,19 @@ class TravelSpotControllerTest extends TestCase
             ));
     }
 
-    // public function testDestroyLastSpot(): void
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
-    //     $travel = $this->runningTravel($passenger, $driver, true)->create();
-    //     $spot = $travel->spots()->where("position", 1)->firstOrFail();
+    public function testDestroyLastSpot(): void
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
+        $travel = $this->runningTravel($passenger, $driver, true)->create();
+        $spot = $travel->spots()->where("position", 1)->firstOrFail();
     
-    //     Sanctum::actingAs($passenger);
-    //     $response = $this->deleteJson("/api/travels/{$travel->id}/spots/{$spot->id}")
-    //         ->assertStatus(400)
-    //         ->assertJson(array(
-    //             'code' => 'ProtectedSpot'
-    //         ));
-    // }
+        Sanctum::actingAs($passenger);
+        $response = $this->deleteJson("/api/travels/{$travel->id}/spots/{$spot->id}")
+            ->assertStatus(400)
+            ->assertJson(array(
+                'code' => 'ProtectedSpot'
+            ));
+    }
 
     protected function assertPositionsInRange(int $expactedSpots, array $spots): void {
         $this->assertCount($expactedSpots, $spots);

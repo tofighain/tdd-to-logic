@@ -95,8 +95,9 @@ class TravelSpotController extends Controller
 			throw new InvalidTravelStatusForThisActionException();
 		
 		$theSpot = TravelSpot::where([['travel_id', '=', $travel],['id', '=', $spot]])->firstOrFail();
-		if ($theSpot->position == 0)
-				throw new ProtectedSpotException();
+		
+		if ($theSpot->position == 0 || $theSpot->position == $theTravel->spots->max('position'))
+			throw new ProtectedSpotException();
 		
 		$theSpot->delete();
 		TravelSpot::where([['travel_id', '=', $travel],['id', '>', $spot]])->decrement('position');

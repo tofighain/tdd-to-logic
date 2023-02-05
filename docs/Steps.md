@@ -460,3 +460,13 @@ Passanger can not delete the origin (first spot).
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: TravelSpotControllerTest@testDestroyOrigin | Changed: TravelSpotControllerTest. Changed: TravelSpotController.|
+
+###6.12. testDestroyLastSpot
+Passanger can not delete the last spot. the fully fledged piece of code that checks two latest tests for (Origin/ Destination) spots is as follow:
+```php
+if ($theSpot->position == 0 || $theSpot->position == $theTravel->spots->max('position'))
+	throw new ProtectedSpotException();
+```
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelSpotControllerTest@testDestroyLastSpot | Changed: TravelSpotControllerTest. Changed: TravelSpotController.|
