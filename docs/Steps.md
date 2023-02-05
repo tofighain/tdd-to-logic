@@ -47,9 +47,9 @@ php artisan migrate
 # D. PASSING TEST
 Because the only resources we have to conclude what should be programmed are test cases and a brief readme file so I used the tests as a starting point to apporach the challange.
 
-##1. AuthControllerTest
+## 1. AuthControllerTest
 
-###1.1. testRegister
+### 1.1. testRegister
 
 a) How to test? Instead of ```php artisan test``` I prefer to use ```phpunit --filter AuthControllerTest``` as it is obviouse in the changes i also commented out all other test cases.
 
@@ -71,7 +71,7 @@ c) There are a RegisterRequest class inside Requests folder which can be used to
 |----------------|:-----------------|
 | test passed: AuthControllerTest@testRegister | Changed: Fillables in the model. Added: RegisterResource. Changed: AuthController@register. Commented: Extra test cases inside the main test class |
 
-###1.2. testUser
+### 1.2. testUser
 a) because in the second test method we see ```Sanctum``` and static call for ```actingAs``` it can be concluded that user authentication should be perform using **api tokens**. So in the register (/create a new user) we should add token to the user using below:
 ```php
 $user['token'] = $user->createToken('api-token')->plainTextToken;
@@ -91,12 +91,12 @@ b) again based on route address ('/api/user') that references to AuthController@
     |----------------|:-----------------|
     | Added: todo.md | Added: todo.md so we can cooperate, down the road | 
 
-##2. DriverControllerTest
+## 2. DriverControllerTest
 here is why i choose to work with this test class. because according to documentations, A driver is a **sub-entity** of **user** and these two are very related together. 
 
 * **Note** that it is a hirearchial entity so I suggest an interface called **IUser** is added to the struture, so using **strategy design pattern** we can create subclasses and other sibbling-classes easily and correctly.
 
-###2.1. testSignup
+### 2.1. testSignup
 
 a) each driver has at least two extra properties related to his/ her auto/car (```car_plate```, ```car_model```). and one extra property for the ```status```, that is modeled as Enumerator in **app/Enums/DriverStatus.php**. Using the data, we should again add a new resource: ```DriverResource```. It also noted an specified request class exists in my code base called ```DriverSignupRequest``` that handles validation of driver signup proccess, so I typehint it in the ```signup``` method. In this step i don't create a ```DriverSignupResource``` maybe later i add it if is needed.
 b) we should check for 2 things in driver ```signup``` method
@@ -110,7 +110,7 @@ b) we should check for 2 things in driver ```signup``` method
 | test passed: DriverControllerTest@testSignup | Added: DriverResource. Changed: todo.md. Changed: DriverController@signup. Changed:AuthController@user|
 
 
-###2.2. testUpdate
+### 2.2. testUpdate
 *[**DEPRICATED NOTES**: In this stage, because Travel controller is not defined, I omit the test for now, and work on passing Travel and TravelEvent unit tests.]*
 * **Note**: Several assertion in one test method is not a good practice.
 
@@ -126,17 +126,17 @@ Based on the test below states can be inferred:
 
 
 
-##3. TravelTest
+## 3. TravelTest
 The only TravelTest method is testRelations. Which the other team members have done the job by creating a greate Travel eloquent model. I did nothing here so, there would be no version controlling here. 
 
-##4. TravelEventTest.php
+## 4. TravelEventTest.php
 Again there is one and only test of this class is testRelations, which is passed because of a perfect TravelEvent elqouent model.
 I think more test can be designed in 3 and 4 cases.
 
-##5. TravelControllerTest
+## 5. TravelControllerTest
 In order to complete **TravelController** i ommit 2.2. tests for now.
 
-###5.1 testStore
+### 5.1 testStore
 testStore targets **TravelController@store** method. 
 - There is a TravelStoreRequest class to handle these types of request, so I typehint it in the store methode. 
 - Reverse engineering shows the authenticated passenger can create the travel, I get it from ```$request->user()```.
@@ -153,10 +153,10 @@ testStore targets **TravelController@store** method.
 |----------------|:-----------------|
 | test passed: TravelControllerTest@testStore | Added: TravelStoreResource. Changed: Travel. Changed: TravelController. Changed:TravelSpot. Changed: TravelControllerTest|
 
-###5.2 testStoreWithBadPositions, testStoreWhenHaveActiveTravel
+### 5.2 testStoreWithBadPositions, testStoreWhenHaveActiveTravel
 these two tests are also passed using provided code in 5.1. so no need to version-control (no changes !)
 
-###5.3 testCancelSearchingForDriverAsPassenger
+### 5.3 testCancelSearchingForDriverAsPassenger
 this test targets **TravelController@cancel** in route */travels/{travel}/cancel*. 
 - based on the test, a logged-in user (passanger of a travel) can cancel the travel, so we need to extract passanger info. 
 - based on the test, and also the api call, data of the travel (travel_id) should be inserted into the method as args.
@@ -176,7 +176,7 @@ this test targets **TravelController@cancel** in route */travels/{travel}/cancel
 | test passed: TravelControllerTest@testCancelSearchingForDriverAsPassenger and testCancelFinishedTravel | Changed: todo.md. Changed: TravelControllerTest. Changed: TravelController|
 
 
-###5.3 testCancelOnboardPassenger
+### 5.4 testCancelOnboardPassenger
 - First of all it is a bad naming decision to use similar names instead of exact naming. There is a method called ```passengerIsInCar``` but here the test specify to test **OnBoard**. so it is better to change method name because OnBoard is more general and can model future needs.
 - To pass this test we should modify the cancel method so it models both passengers and drivers. for instance, $passanger subtitutes with $user, and where clause changes to 
 ```php
@@ -190,7 +190,7 @@ this test targets **TravelController@cancel** in route */travels/{travel}/cancel
 |----------------|:-----------------|
 | test passed: TravelControllerTest@testCancelOnboardPassenger | Changed: todo.md. Changed: TravelControllerTest. Changed: TravelController|
 
-###5.4. testCancelArrivedCar
+### 5.5. testCancelArrivedCar
 As it is stated in TestingTravel concerns, **users can not cancel** an already running travel. Also based on the test method **drivers can cancel** an already running travel. This test should be considered for more improvements. 
 * Now is the time to commit the changes as below:
     
@@ -198,7 +198,7 @@ As it is stated in TestingTravel concerns, **users can not cancel** an already r
 |----------------|:-----------------|
 | test passed: TravelControllerTest@testCancelArrivedCar | Changed: todo.md. Changed: TravelControllerTest. Changed: TravelController|
 
-###5.5. testView
+### 5.6. testView
 The test targets **TravelController@view** and implies that both passangers and drivers can view the travel and I think it is better for them to see their own travels not travels of the others. And because it is a get request, it is better to use request() global helper instead of injecting $request into the method.
 * Now is the time to commit the changes as below:
     
@@ -206,7 +206,7 @@ The test targets **TravelController@view** and implies that both passangers and 
 |----------------|:-----------------|
 | test passed: TravelControllerTest@testView | Changed: TravelControllerTest. Changed: TravelController|
 
-###5.5. testPassengerOnBoard
+### 5.7. testPassengerOnBoard
 The test targets **TravelController@passengerOnBoard** which is a post request in the api. And checks if a passanger is on board in any of travel events. 
 
 - it checks driver's passanger (the passanger of the driver), so **the driver can check this endpoint**.
@@ -228,7 +228,7 @@ The test targets **TravelController@passengerOnBoard** which is a post request i
 |----------------|:-----------------|
 | test passed: TravelControllerTest@testPassengerOnBoard | Changed: todo.md. Changed: TravelControllerTest. Changed: TravelController. Changed: TestingTravel. Changed: TravelEvent.|
 
-###5.6. testPassengerOnBoardAsPassenger
+### 5.8. testPassengerOnBoardAsPassenger
 this test is already passed bacause of the logic of previous test and reverse-engineering. so no need of version-controlling here. 
 
 ###5.7. testPassengerOnBoardWhenCarIsNotArrived
@@ -239,14 +239,14 @@ the test like its predecessors targets **TravelController@passengerOnBoard**. No
 |----------------|:-----------------|
 | test passed: TravelControllerTest@testPassengerOnBoardWhenCarIsNotArrived and testPassengerOnBoardAsPassenger | Changed: TravelControllerTest. Changed: TravelController.|
 
-###5.8. testPassengerOnBoardFinishedTravel
+### 5.9. testPassengerOnBoardFinishedTravel
 If the travel is finished, no one allowed to check if somebody is on board. **IS IT LOGICALLY A GOOD ASSUMPTION ?**
 
 | git message    | what have i done |
 |----------------|:-----------------|
 | finished: all tests of passengerOnBoard method is finished. test passed: TravelControllerTest@testPassengerOnBoardFinishedTravel | Changed: TravelControllerTest. Changed: TravelController. Changed: todo.md|
 
-###5.9. testDone
+### 5.10. testDone
 It targets **/travels/{travel}/done** of api routes and **TravelController@done()** method in the controller. **several matters are tested in this single method, that may not be a good Idea**. 
 Based on the test setup and the first assertion:
  - driver can mark a travel as done. 
@@ -265,7 +265,7 @@ Based on the third assertion:
 based on this test in contrast with the driver, the user can not mark a travel as done. This situation was implied based on pervious test, so no need for version-control, here. 
 **BUT NOTE THAT** in cancel method both of the passanger and driver could mark a travel as canceled !
 
-###5.11. testDoneWhenSpotsSkipped
+### 5.11. testDoneWhenSpotsSkipped
 using provided eloquent-model method ```allSpotsPassed``` in the **Travel** class, we can check if all spotes are passed or not. If the latest is the case, driver is not able to mark the travel as done. Because this case has its own exception, i put it in a seperate ```if``` statement block, and of course before i check travel is in ```RUNNING``` state.
 * Now is the time to commit the changes as below:
     
@@ -273,7 +273,7 @@ using provided eloquent-model method ```allSpotsPassed``` in the **Travel** clas
 |----------------|:-----------------|
 | test passed: TravelControllerTest@testDoneWhenSpotsSkipped | Changed: TravelControllerTest. Changed: TravelController. Changed: todo.md|
 
-###5.12. testTake
+### 5.12. testTake
 This test and multiple later ones, target **TravelControl@take** and try to model if a driver can or can not take a travel. based on the current test:
  - driver can take travel with the status of ```SEARCHING_FOR_DRIVER```
  - the weird thing here is that based on the needed results, after trying to take the travel, driver_id is updated but the status remains ```SEARCHING_FOR_DRIVER```. I noted this issue in the todo.md under concerns. 
@@ -286,7 +286,7 @@ This test and multiple later ones, target **TravelControl@take** and try to mode
 | test passed: TravelControllerTest@testTake | Added: TravelTakeResource. Changed: TravelControllerTest. Changed: TravelController. Changed: todo.md.|
 
 
-###5.13. testTakeCancelledTravel
+### 5.13. testTakeCancelledTravel
 based on this test driver can not take a cancelled travel. otherwise a specialized exception will be thrown (```InvalidTravelStatusForThisActionException```). 
 **optimization**: Because normal people don't send this kind of requests, i code it after 
 ```php
@@ -298,7 +298,7 @@ if($theTravel->status == TravelStatus::SEARCHING_FOR_DRIVER)
 |----------------|:-----------------|
 | test passed: TravelControllerTest@testTakeCancelledTravel | Changed: TravelControllerTest. Changed: TravelController. |
 
-###5.14. testTakeWithActiveTravel
+### 5.14. testTakeWithActiveTravel
 This test aims to prevent drivers who already are in a travel. 
 - **Optimization**: because the problem with multiple travels occurs to the drivers, so before even we recreate the travel from provided id, we can check this fact. but because we are going to use a static method in the **Travel** class instead of **User** or **Driver** model classes, again i suggest impelemting the check inside of **Driver** class. also using strategy DP is suggested to model users, drivers, and passangers.
 - we can check that the driver has active travels using ```userHasActiveTravel``` method. 
@@ -311,10 +311,10 @@ This test aims to prevent drivers who already are in a travel.
 
 *at this stage i will finish the DriverControllerTest but it is documented in section 2.2. look at the git changes to know more.
 
-##6. TravelSpotControllerTest
+## 6. TravelSpotControllerTest
 All tests in this section targets travel's spot entity in **TravelSpotController**
 
-###6.1. testArrived()
+### 6.1. testArrived()
 Below are the assumptions that can be extracted from the test:
     - first assertion:
         - **TravelSpotController@arrived** method is targeted.
@@ -333,7 +333,7 @@ Below are the assumptions that can be extracted from the test:
 |----------------|:-----------------|
 | test passed: TravelSpotControllerTest@testArrived | Changed: TravelSpotControllerTest. Changed: TravelSpotController. |
 
-###6.2. testArrivedAsPassenger()
+### 6.2. testArrivedAsPassenger()
 the whole test is similar to the third assertion of previous test:
 ```php
 Sanctum::actingAs($passenger);
@@ -343,7 +343,7 @@ $response = $this->postJson("/api/travels/{$travel->id}/spots/{$origin->id}/arri
 and it is passed already. So no need for version-controlling.
 
 
-###6.3. testArrivedNotRunningTravel()
+### 6.3. testArrivedNotRunningTravel()
 Again it targets and from the test below could be understood:
     - travel with status of CANCELLED is feeded to the api
     - drivers may check the endpoint
@@ -355,7 +355,7 @@ Again it targets and from the test below could be understood:
 |----------------|:-----------------|
 | test passed: TravelSpotControllerTest@testArrivedNotRunningTravel and  TravelSpotControllerTest@testArrivedAsPassenger | Changed: TravelSpotControllerTest. Changed: TravelSpotController. |
 
-###6.4. testArrivedWhenAlreadyArrived()
+### 6.4. testArrivedWhenAlreadyArrived()
 From the test can be found that:
     - A running travel is feeded to the api
     - the driver already has been arrived to the origin (first spot == position 0)
@@ -377,7 +377,7 @@ if($theTravel->status != TravelStatus::RUNNING)
 |----------------|:-----------------|
 | test passed: TravelSpotControllerTest@testArrivedWhenAlreadyArrived | Changed: TravelSpotControllerTest. Changed: TravelSpotController. |
 
-###6.5. testStore()
+### 6.5. testStore()
 It tragets, **TravelSpotController@store** using post method.
     - the ```assertPositionsInRange``` should be uncommented. 
     - In addition to ```Request $request``` travel_id also should be added in args of ```store``` method.
@@ -391,7 +391,7 @@ It tragets, **TravelSpotController@store** using post method.
 |----------------|:-----------------|
 | test passed: TravelSpotControllerTest@testStore | Changed: TravelSpotControllerTest. Changed: TravelSpotController. Changed: todo.md. Changed: TravelSpot|
 
-###6.5. testStoreAsDriver()
+### 6.6. testStoreAsDriver()
 I passed this test before, so no need for version control.
 
 
@@ -404,7 +404,7 @@ This test says user can not ask to insert a spot with the position more than ```
 |----------------|:-----------------|
 | test passed: TravelSpotControllerTest@testStoreOutOfRange | Changed: TravelSpotControllerTest. Changed: TravelSpotController.|
 
-###6.7. testStoreArrived
+### 6.7. testStoreArrived
 user can not store a new spot if he/she already arrived there. so below will do the job:
 ```php
 if ($theTravel->allSpotsPassed()) {
@@ -415,14 +415,14 @@ if ($theTravel->allSpotsPassed()) {
 |----------------|:-----------------|
 | test passed: TravelSpotControllerTest@testStoreArrived | Changed: TravelSpotControllerTest. Changed: TravelSpotController.|
 
-###6.8. testStoreNotRunningTravel
+### 6.8. testStoreNotRunningTravel
 If it is not a travel with ```RUNNING``` status, so passanger is unable to add spots to it. 
 
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: TravelSpotControllerTest@testStoreNotRunningTravel | Changed: TravelSpotControllerTest. Changed: TravelSpotController.|
 
-###6.7. testDestroy
+### 6.9. testDestroy
 from now on, all test target **/travels/{travel}/spots/{spot}** using delete method. the method needs ```travel_id``` and ```spot_id``` to proccess requests. 
     - the spot with provided ```travel_id``` and ```id``` should be delete.
     - other later points should be decremented by one. below makes it work:
@@ -440,10 +440,10 @@ when a travel is in ```RUNNING``` status, do deletion is allowed.
 |----------------|:-----------------|
 | test passed: TravelSpotControllerTest@testDestroyNotRunningTravel | Changed: TravelSpotControllerTest. Changed: TravelSpotController.|
 
-###6.9. testDestroyNotRunningTravel
+### 6.10. testDestroyNotRunningTravel
 This test already is checked and passed. 
 
-###6.10. testDestroyArrived
+### 6.11. testDestroyArrived
 This test is similar to the one for store and passed easily, using the same check:
 ```php
 if ($theTravel->allSpotsPassed())
@@ -455,13 +455,13 @@ if ($theTravel->allSpotsPassed())
 | test passed: TravelSpotControllerTest@testDestroyArrived | Changed: TravelSpotControllerTest. Changed: TravelSpotController.|
 
 
-###6.11. testDestroyOrigin
+### 6.12. testDestroyOrigin
 Passanger can not delete the origin (first spot).
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: TravelSpotControllerTest@testDestroyOrigin | Changed: TravelSpotControllerTest. Changed: TravelSpotController.|
 
-###6.12. testDestroyLastSpot
+### 6.13. testDestroyLastSpot
 Passanger can not delete the last spot. the fully fledged piece of code that checks two latest tests for (Origin/ Destination) spots is as follow:
 ```php
 if ($theSpot->position == 0 || $theSpot->position == $theTravel->spots->max('position'))
