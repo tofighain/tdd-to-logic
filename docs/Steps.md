@@ -342,6 +342,7 @@ $response = $this->postJson("/api/travels/{$travel->id}/spots/{$origin->id}/arri
 ```
 and it is passed already. So no need for version-controlling.
 
+
 ###6.3. testArrivedNotRunningTravel()
 Again it targets and from the test below could be understood:
     - travel with status of CANCELLED is feeded to the api
@@ -353,3 +354,25 @@ Again it targets and from the test below could be understood:
 | git message    | what have i done |
 |----------------|:-----------------|
 | test passed: TravelSpotControllerTest@testArrivedNotRunningTravel and  TravelSpotControllerTest@testArrivedAsPassenger | Changed: TravelSpotControllerTest. Changed: TravelSpotController. |
+
+###6.4. testArrivedWhenAlreadyArrived()
+From the test can be found that:
+    - A running travel is feeded to the api
+    - the driver already has been arrived to the origin (first spot == position 0)
+    - in the tested situation an exception of type **SpotAlreadyPassedException** should be thrown.
+    - after recreating the travel the check could be performed.
+
+**To better model the pervious test**,  i changed the check form
+```php 
+if($theTravel->status == TravelStatus::CANCELLED)
+```
+to 
+```php
+if($theTravel->status != TravelStatus::RUNNING)
+```
+
+* Now is the time to commit the changes as below:
+    
+| git message    | what have i done |
+|----------------|:-----------------|
+| test passed: TravelSpotControllerTest@testArrivedWhenAlreadyArrived | Changed: TravelSpotControllerTest. Changed: TravelSpotController. |

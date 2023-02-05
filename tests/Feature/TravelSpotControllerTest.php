@@ -67,19 +67,21 @@ class TravelSpotControllerTest extends TestCase
             ));
     }
 
-    // public function testArrivedWhenAlreadyArrived(): void
-    // {
-    //     [$passenger, $driver] = $this->createPassengerDriver();
-    //     $travel = $this->runningTravel($passenger, $driver, true)->create();
-    //     $origin = $travel->getOriginSpot();
+    public function testArrivedWhenAlreadyArrived(): void
+    {
+        [$passenger, $driver] = $this->createPassengerDriver();
+        $travel = $this->runningTravel($passenger, $driver, true)->create();
+        $origin = $travel->getOriginSpot();
 
-    //     Sanctum::actingAs($driver->user);
-    //     $this->postJson("/api/travels/{$travel->id}/spots/{$origin->id}/arrived")
-    //         ->assertStatus(400)
-    //         ->assertJson(array(
-    //             'code' => 'SpotAlreadyPassed'
-    //         ));
-    // }
+        // dd($travel->spots); // a running travel with origin spot.
+        // dd($travel->driverHasArrivedToOrigin()); // driver already has been arrived to the orgin
+        Sanctum::actingAs($driver->user);
+        $this->postJson("/api/travels/{$travel->id}/spots/{$origin->id}/arrived")
+            ->assertStatus(400)
+            ->assertJson(array(
+                'code' => 'SpotAlreadyPassed'
+            ));
+    }
 
     // public function testStore(): void
     // {
